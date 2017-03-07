@@ -56,7 +56,8 @@ public class PetDbHelper extends SQLiteOpenHelper {
                 + PetEntry.COLUMN_SHELL_NAME + " TEXT NOT NULL, "
                 + PetEntry.COLUMN_SHELL_COLOR + " TEXT, "
                 + PetEntry.COLUMN_SHELL_HOLE + " INTEGER NOT NULL, "
-                + PetEntry.COLUMN_SHELL_TYPE + " INTEGER NOT NULL);";
+                + PetEntry.COLUMN_SHELL_TYPE + " INTEGER NOT NULL,"
+                + PetEntry.COLUMN_SHELL_PHOTO + "TEXT);";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_PETS_TABLE);

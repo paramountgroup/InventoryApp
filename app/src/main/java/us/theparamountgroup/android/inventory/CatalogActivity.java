@@ -38,6 +38,8 @@ public class CatalogActivity extends AppCompatActivity {
     /** Identifier for the pet data loader */
     private static final int PET_LOADER = 0;
 
+    private static String NO_PHOTO = "";
+
     public static CatalogActivity parentContext;
 
     /** Adapter for the ListView */
@@ -129,6 +131,7 @@ public class CatalogActivity extends AppCompatActivity {
         values.put(PetEntry.COLUMN_SHELL_COLOR, "White");
         values.put(PetEntry.COLUMN_SHELL_HOLE, PetEntry.HOLE);
         values.put(PetEntry.COLUMN_SHELL_TYPE, PetEntry.TYPE_JINGLE);
+        values.put(PetEntry.COLUMN_SHELL_PHOTO, NO_PHOTO);
 
         // Insert a new row for Toto into the provider using the ContentResolver.
         // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert

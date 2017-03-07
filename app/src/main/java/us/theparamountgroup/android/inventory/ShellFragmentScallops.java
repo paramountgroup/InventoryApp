@@ -26,6 +26,8 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
      * Identifier for the pet data loader
      */
     private static final int PET_LOADER = 0;
+
+    private static String NO_PHOTO = "";
     /**
      * Adapter for the ListView
      */
@@ -109,7 +111,10 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
         String[] projection = {
                 ShellContract.PetEntry._ID,
                 ShellContract.PetEntry.COLUMN_SHELL_NAME,
-                ShellContract.PetEntry.COLUMN_SHELL_COLOR};
+                ShellContract.PetEntry.COLUMN_SHELL_COLOR,
+                ShellContract.PetEntry.COLUMN_SHELL_HOLE};
+           //     ShellContract.PetEntry.COLUMN_SHELL_PHOTO};
+
 
         String[] scallopArgument = {
                 "0"

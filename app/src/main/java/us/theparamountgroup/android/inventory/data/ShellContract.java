@@ -90,14 +90,21 @@ public final class ShellContract {
         public final static String COLUMN_SHELL_NAME ="name";
 
         /**
-         * Breed of the pet.
+         * Color of the shell.
          *
          * Type: TEXT
          */
         public final static String COLUMN_SHELL_COLOR = "color";
 
         /**
-         * Gender of the pet.
+         * Photo of the shell.
+         *
+         * Type: TEXT
+         */
+        public final static String COLUMN_SHELL_PHOTO = "photo";
+
+        /**
+         * Does the shell have a hole.
          *
          * The only possible values are {@link #HOLE_UNKNOWN}, {@link #HOLE},
          * or {@link #NO_HOLE}.
