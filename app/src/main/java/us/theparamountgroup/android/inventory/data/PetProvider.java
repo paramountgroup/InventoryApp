@@ -154,7 +154,7 @@ public class PetProvider extends ContentProvider {
 
         // Check that the hole type is valid
         Integer hole = values.getAsInteger(PetEntry.COLUMN_SHELL_HOLE);
-        if (hole == null || !PetEntry.isValidGender(hole)) {
+        if (hole == null || !PetEntry.isValidHole(hole)) {
             throw new IllegalArgumentException("Shell requires valid Hole type");
         }
 
@@ -218,7 +218,7 @@ public class PetProvider extends ContentProvider {
         // check that the gender value is valid.
         if (values.containsKey(PetEntry.COLUMN_SHELL_HOLE)) {
             Integer gender = values.getAsInteger(PetEntry.COLUMN_SHELL_HOLE);
-            if (gender == null || !PetEntry.isValidGender(gender)) {
+            if (gender == null || !PetEntry.isValidHole(gender)) {
                 throw new IllegalArgumentException("Shell requires valid Hole Type");
             }
         }

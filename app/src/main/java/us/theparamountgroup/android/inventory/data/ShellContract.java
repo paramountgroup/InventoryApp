@@ -134,12 +134,14 @@ public final class ShellContract {
 
 
 
+
+
         /**
-         * Returns whether or not the given gender is {@link #HOLE_UNKNOWN}, {@link #HOLE},
+         * Returns whether or not the given shell hole is {@link #HOLE_UNKNOWN}, {@link #HOLE},
          * or {@link #NO_HOLE}.
          */
-        public static boolean isValidGender(int gender) {
-            if (gender == HOLE_UNKNOWN || gender == HOLE || gender == NO_HOLE) {
+        public static boolean isValidHole(int hole) {
+            if (hole == HOLE_UNKNOWN || hole == HOLE || hole == NO_HOLE) {
                 return true;
             }
             return false;
@@ -150,7 +152,7 @@ public final class ShellContract {
          * or {@link #NO_HOLE}.
          */
         public static boolean isValidType(int shellType) {
-            if (shellType == HOLE_UNKNOWN || shellType == HOLE || shellType == NO_HOLE) {
+            if (shellType == TYPE_SCALLOP || shellType == TYPE_JINGLE || shellType == TYPE_SLIPPER || shellType == TYPE_SHARD) {
                 return true;
             }
             return false;
