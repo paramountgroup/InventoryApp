@@ -131,7 +131,7 @@ public class CatalogActivity extends AppCompatActivity {
         values.put(PetEntry.COLUMN_SHELL_COLOR, "White");
         values.put(PetEntry.COLUMN_SHELL_HOLE, PetEntry.HOLE);
         values.put(PetEntry.COLUMN_SHELL_TYPE, PetEntry.TYPE_JINGLE);
-        values.put(PetEntry.COLUMN_SHELL_PHOTO, NO_PHOTO);
+       // values.put(PetEntry.COLUMN_SHELL_PHOTO, NO_PHOTO);
 
         // Insert a new row for Toto into the provider using the ContentResolver.
         // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
