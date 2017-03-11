@@ -42,14 +42,14 @@
             <!-- Name field -->
             <EditText
                 android:id="@+id/edit_pet_name"
-                android:hint="@string/hint_pet_name"
+                android:hint="@string/hint_shell_name"
                 android:inputType="textCapWords"
                 style="@style/EditorFieldStyle" />
 
             <!-- Breed field -->
             <EditText
                 android:id="@+id/edit_pet_breed"
-                android:hint="@string/hint_pet_breed"
+                android:hint="@string/hint_shell_color"
                 android:inputType="textCapWords"
                 style="@style/EditorFieldStyle" />
         </LinearLayout>
@@ -64,7 +64,7 @@
 
         <!-- Label -->
         <TextView
-            android:text="@string/category_gender"
+            android:text="@string/category_hole"
             style="@style/CategoryStyle" />
 
         <!-- Input field -->
@@ -93,7 +93,7 @@
 
         <!-- Label -->
         <TextView
-            android:text="@string/category_gender"
+            android:text="@string/category_type"
             style="@style/CategoryStyle" />
 
         <!-- Input field -->
@@ -113,37 +113,4 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Measurement category -->
-    <LinearLayout
-        android:id="@+id/container_measurement"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <!-- Label -->
-        <TextView
-            android:text="@string/category_measurement"
-            style="@style/CategoryStyle" />
-
-        <!-- Input fields -->
-        <RelativeLayout
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:paddingLeft="4dp">
-
-            <!-- Weight field -->
-            <EditText
-                android:id="@+id/edit_pet_weight"
-                android:hint="@string/hint_pet_weight"
-                android:inputType="number"
-                style="@style/EditorFieldStyle" />
-
-            <!-- Units for weight (kg) -->
-            <TextView
-                android:id="@+id/label_weight_units"
-                android:text="@string/unit_pet_weight"
-                style="@style/EditorUnitsStyle"/>
-        </RelativeLayout>
-    </LinearLayout>
 </LinearLayout>

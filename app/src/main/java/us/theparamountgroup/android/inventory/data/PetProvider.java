@@ -152,19 +152,15 @@ public class PetProvider extends ContentProvider {
             throw new IllegalArgumentException("Pet requires a name");
         }
 
-        // Check that the gender is valid
-        Integer gender = values.getAsInteger(PetEntry.COLUMN_SHELL_HOLE);
-        if (gender == null || !PetEntry.isValidGender(gender)) {
-            throw new IllegalArgumentException("Pet requires valid gender");
+        // Check that the hole type is valid
+        Integer hole = values.getAsInteger(PetEntry.COLUMN_SHELL_HOLE);
+        if (hole == null || !PetEntry.isValidGender(hole)) {
+            throw new IllegalArgumentException("Shell requires valid Hole type");
         }
 
-        // If the weight is provided, check that it's greater than or equal to 0 kg
-       // Integer weight = values.getAsInteger(PetEntry.COLUMN_SHELL_TYPE);
-        //if (weight != null && weight < 0) {
-        //    throw new IllegalArgumentException("Pet requires valid weight");
-        //}
 
-        // No need to check the breed, any value is valid (including null).
+
+        // No need to check the color, any value is valid (including null).
 
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
@@ -214,7 +210,7 @@ public class PetProvider extends ContentProvider {
         if (values.containsKey(PetEntry.COLUMN_SHELL_NAME)) {
             String name = values.getAsString(PetEntry.COLUMN_SHELL_NAME);
             if (name == null) {
-                throw new IllegalArgumentException("Pet requires a name");
+                throw new IllegalArgumentException("Shell requires a name");
             }
         }
 

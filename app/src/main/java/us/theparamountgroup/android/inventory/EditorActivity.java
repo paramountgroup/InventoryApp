@@ -63,8 +63,7 @@ public class EditorActivity extends AppCompatActivity implements
     /** EditText field to enter the pet's breed */
     private EditText mBreedEditText;
 
-    /** EditText field to enter the pet's weight */
-    private EditText mWeightEditText;
+
 
     /** EditText field to enter the pet's gender */
     private Spinner mGenderSpinner;
@@ -133,7 +132,7 @@ public class EditorActivity extends AppCompatActivity implements
         // Find all relevant views that we will need to read user input from
         mNameEditText = (EditText) findViewById(R.id.edit_pet_name);
         mBreedEditText = (EditText) findViewById(R.id.edit_pet_breed);
-        mWeightEditText = (EditText) findViewById(R.id.edit_pet_weight);
+
         mGenderSpinner = (Spinner) findViewById(R.id.spinner_gender);
         mTypeSpinner = (Spinner) findViewById(R.id.spinner_type);
 
@@ -142,7 +141,7 @@ public class EditorActivity extends AppCompatActivity implements
         // or not, if the user tries to leave the editor without saving.
         mNameEditText.setOnTouchListener(mTouchListener);
         mBreedEditText.setOnTouchListener(mTouchListener);
-        mWeightEditText.setOnTouchListener(mTouchListener);
+
         mGenderSpinner.setOnTouchListener(mTouchListener);
         mTypeSpinner.setOnTouchListener(mTouchListener);
 
@@ -157,7 +156,7 @@ public class EditorActivity extends AppCompatActivity implements
         // Create adapter for spinner. The list options are from the String array it will use
         // the spinner will use the default layout
         ArrayAdapter genderSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.array_gender_options, android.R.layout.simple_spinner_item);
+                R.array.array_hole_options, android.R.layout.simple_spinner_item);
 
         // Specify dropdown layout style - simple list view with 1 item per line
         genderSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -239,13 +238,12 @@ public class EditorActivity extends AppCompatActivity implements
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
         String breedString = mBreedEditText.getText().toString().trim();
-        String weightString = mWeightEditText.getText().toString().trim();
+
 
         // Check if this is supposed to be a new pet
         // and check if all the fields in the editor are blank
         if (mCurrentPetUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(breedString) &&
-                TextUtils.isEmpty(weightString) && mGender == ShellContract.PetEntry.HOLE_UNKNOWN) {
+                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(breedString) && mGender == ShellContract.PetEntry.HOLE_UNKNOWN) {
             // Since no fields were modified, we can return early without creating a new pet.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
@@ -258,15 +256,7 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(ShellContract.PetEntry.COLUMN_SHELL_COLOR, breedString);
         values.put(ShellContract.PetEntry.COLUMN_SHELL_HOLE, mGender);
         values.put(ShellContract.PetEntry.COLUMN_SHELL_TYPE, mType);
-        // If the weight is not provided by the user, don't try to parse the string into an
-        // integer value. Use 0 by default.
-        /*
-        int weight = 0;
-        if (!TextUtils.isEmpty(weightString)) {
-            weight = Integer.parseInt(weightString);
-        }
-        values.put(ShellContract.PetEntry.COLUMN_SHELL_TYPE, weight);
-*/
+
         // Determine if this is a new or existing pet by checking if mCurrentPetUri is null or not
         if (mCurrentPetUri == null) {
             // This is a NEW pet, so insert a new pet into the provider,
@@ -434,14 +424,14 @@ public class EditorActivity extends AppCompatActivity implements
 
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
-            String breed = cursor.getString(breedColumnIndex);
+            String color = cursor.getString(breedColumnIndex);
             int gender = cursor.getInt(genderColumnIndex);
             int type = cursor.getInt(typeColumnIndex);
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
-            mBreedEditText.setText(breed);
-            mWeightEditText.setText(Integer.toString(type));
+            mBreedEditText.setText(color);
+
 
             // Gender is a dropdown spinner, so map the constant value from the database
             // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
@@ -480,7 +470,7 @@ public class EditorActivity extends AppCompatActivity implements
         // If the loader is invalidated, clear out all the data from the input fields.
         mNameEditText.setText("");
         mBreedEditText.setText("");
-        mWeightEditText.setText("");
+
         mGenderSpinner.setSelection(0); // Select "Unknown" gender
         mTypeSpinner.setSelection(0); // Select "Scallop" to type
     }

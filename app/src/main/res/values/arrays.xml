@@ -12,7 +12,7 @@
 -->
 <resources>
     <!-- These are the options displayed in the gender drop-down Spinner -->
-    <string-array name="array_gender_options">
+    <string-array name="array_hole_options">
     <item>@string/hole_unknown</item>
     <item>@string/no_hole</item>
     <item>@string/hole</item>
