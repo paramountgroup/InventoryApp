@@ -27,7 +27,7 @@ import android.util.Log;
 import us.theparamountgroup.android.inventory.data.ShellContract.PetEntry;
 
 /**
- * {@link ContentProvider} for Pets app.
+ * {@link ContentProvider} for Shells app.
  */
 public class ShellProvider extends ContentProvider {
 
@@ -55,16 +55,16 @@ public class ShellProvider extends ContentProvider {
 
         // The content URI of the form "content://us.theparamountgroup.android.inventory/shells" will map to the
         // integer code {@link #}. This URI is used to provide access to MULTIPLE rows
-        // of the pets table.
+        // of the shells table.
         sUriMatcher.addURI(ShellContract.CONTENT_AUTHORITY, ShellContract.PATH_SHELLS, SHELLS);
 
-        // The content URI of the form "content://com.example.android.pets/pets/#" will map to the
+        // The content URI of the form "content://us.theparamountgroup.android.inventory/shells/#" will map to the
         // integer code {@link #SHELL_ID}. This URI is used to provide access to ONE single row
-        // of the pets table.
+        // of the shells table.
         //
         // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
-        // For example, "content://com.example.android.pets/pets/3" matches, but
-        // "content://com.example.android.pets/pets" (without a number at the end) doesn't match.
+        // For example, "content://us.theparamountgroup.android.inventory/shells/3" matches, but
+        // "content://us.theparamountgroup.android.inventory/shells" (without a number at the end) doesn't match.
         sUriMatcher.addURI(ShellContract.CONTENT_AUTHORITY, ShellContract.PATH_SHELLS + "/#", SHELL_ID);
     }
 
@@ -94,15 +94,15 @@ public class ShellProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case SHELLS:
-                // For the SHELLS code, query the pets table directly with the given
+                // For the SHELLS code, query the shells table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
-                // could contain multiple rows of the pets table.
+                // could contain multiple rows of the shells table.
                 cursor = database.query(PetEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case SHELL_ID:
                 // For the SHELL_ID code, extract out the ID from the URI.
-                // For an example URI such as "content://com.example.android.pets/pets/3",
+                // For an example URI such as "content://us.theparamountgroup.android.inventory/shells/3",
                 // the selection will be "_id=?" and the selection argument will be a
                 // String array containing the actual ID of 3 in this case.
                 //
@@ -135,7 +135,7 @@ public class ShellProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case SHELLS:
-                return insertPet(uri, contentValues);
+                return insertShell(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
@@ -145,11 +145,11 @@ public class ShellProvider extends ContentProvider {
      * Insert a pet into the database with the given content values. Return the new content URI
      * for that specific row in the database.
      */
-    private Uri insertPet(Uri uri, ContentValues values) {
+    private Uri insertShell(Uri uri, ContentValues values) {
         // Check that the name is not null
         String name = values.getAsString(PetEntry.COLUMN_SHELL_NAME);
         if (name == null) {
-            throw new IllegalArgumentException("Pet requires a name");
+            throw new IllegalArgumentException("Shell requires a name");
         }
 
         // Check that the hole type is valid
@@ -227,7 +227,7 @@ public class ShellProvider extends ContentProvider {
         // check that the weight value is valid.
         if (values.containsKey(PetEntry.COLUMN_SHELL_TYPE)) {
             // Check that the weight is greater than or equal to 0 kg
-            Integer shellType = values.getAsInteger(PetEntry.COLUMN_SHELL_HOLE);
+            Integer shellType = values.getAsInteger(PetEntry.COLUMN_SHELL_TYPE);
             if (shellType == null || !PetEntry.isValidType(shellType)) {
                 throw new IllegalArgumentException("Shell requires valid Shell Type");
             }
