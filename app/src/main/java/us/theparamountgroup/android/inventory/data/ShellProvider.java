@@ -35,10 +35,10 @@ public class ShellProvider extends ContentProvider {
     public static final String LOG_TAG = ShellProvider.class.getSimpleName();
 
     /** URI matcher code for the content URI for the pets table */
-    private static final int PETS = 100;
+    private static final int SHELLS = 100;
 
     /** URI matcher code for the content URI for a single pet in the pets table */
-    private static final int PET_ID = 101;
+    private static final int SHELL_ID = 101;
 
     /**
      * UriMatcher object to match a content URI to a corresponding code.
@@ -53,19 +53,19 @@ public class ShellProvider extends ContentProvider {
         // should recognize. All paths added to the UriMatcher have a corresponding code to return
         // when a match is found.
 
-        // The content URI of the form "content://com.example.android.pets/pets" will map to the
-        // integer code {@link #PETS}. This URI is used to provide access to MULTIPLE rows
+        // The content URI of the form "content://us.theparamountgroup.android.inventory/shells" will map to the
+        // integer code {@link #}. This URI is used to provide access to MULTIPLE rows
         // of the pets table.
-        sUriMatcher.addURI(ShellContract.CONTENT_AUTHORITY, ShellContract.PATH_SHELLS, PETS);
+        sUriMatcher.addURI(ShellContract.CONTENT_AUTHORITY, ShellContract.PATH_SHELLS, SHELLS);
 
         // The content URI of the form "content://com.example.android.pets/pets/#" will map to the
-        // integer code {@link #PET_ID}. This URI is used to provide access to ONE single row
+        // integer code {@link #SHELL_ID}. This URI is used to provide access to ONE single row
         // of the pets table.
         //
         // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
         // For example, "content://com.example.android.pets/pets/3" matches, but
         // "content://com.example.android.pets/pets" (without a number at the end) doesn't match.
-        sUriMatcher.addURI(ShellContract.CONTENT_AUTHORITY, ShellContract.PATH_SHELLS + "/#", PET_ID);
+        sUriMatcher.addURI(ShellContract.CONTENT_AUTHORITY, ShellContract.PATH_SHELLS + "/#", SHELL_ID);
     }
 
     /** Database helper object */
@@ -93,15 +93,15 @@ public class ShellProvider extends ContentProvider {
         // Figure out if the URI matcher can match the URI to a specific code
         int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
-                // For the PETS code, query the pets table directly with the given
+            case SHELLS:
+                // For the SHELLS code, query the pets table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
                 // could contain multiple rows of the pets table.
                 cursor = database.query(PetEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
-            case PET_ID:
-                // For the PET_ID code, extract out the ID from the URI.
+            case SHELL_ID:
+                // For the SHELL_ID code, extract out the ID from the URI.
                 // For an example URI such as "content://com.example.android.pets/pets/3",
                 // the selection will be "_id=?" and the selection argument will be a
                 // String array containing the actual ID of 3 in this case.
@@ -134,7 +134,7 @@ public class ShellProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues contentValues) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case SHELLS:
                 return insertPet(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
@@ -185,10 +185,10 @@ public class ShellProvider extends ContentProvider {
                       String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case SHELLS:
                 return updatePet(uri, contentValues, selection, selectionArgs);
-            case PET_ID:
-                // For the PET_ID code, extract out the ID from the URI,
+            case SHELL_ID:
+                // For the SHELL_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = PetEntry._ID + "=?";
@@ -266,11 +266,11 @@ public class ShellProvider extends ContentProvider {
 
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case SHELLS:
                 // Delete all rows that match the selection and selection args
                 rowsDeleted = database.delete(PetEntry.TABLE_NAME, selection, selectionArgs);
                 break;
-            case PET_ID:
+            case SHELL_ID:
                 // Delete a single row given by the ID in the URI
                 selection = PetEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
@@ -294,9 +294,9 @@ public class ShellProvider extends ContentProvider {
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case SHELLS:
                 return PetEntry.CONTENT_LIST_TYPE;
-            case PET_ID:
+            case SHELL_ID:
                 return PetEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
