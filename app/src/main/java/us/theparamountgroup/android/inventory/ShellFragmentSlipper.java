@@ -29,7 +29,7 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
     /**
      * Adapter for the ListView
      */
-    PetCursorAdapter mCursorAdapter;
+    ShellCursorAdapter mCursorAdapter;
 
     public ShellFragmentSlipper() {
         Log.i(LOG_TAG, "In ShellFragmentScallops");
@@ -68,7 +68,7 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
         // Setup an Adapter to create a list item for each row of pet data in the Cursor.
         // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
 
-        mCursorAdapter = new PetCursorAdapter(getContext(), null);
+        mCursorAdapter = new ShellCursorAdapter(getContext(), null);
         petListView.setAdapter(mCursorAdapter);
 
         // Setup the item click listener
@@ -128,7 +128,7 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
         Log.i(LOG_TAG, "in onLoadFinished");
 
-        // Update {@link PetCursorAdapter} with this new cursor containing updated pet data
+        // Update {@link ShellCursorAdapter} with this new cursor containing updated pet data
         mCursorAdapter.swapCursor(data);
     }
 

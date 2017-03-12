@@ -37,7 +37,7 @@
                 android:value="us.theparamountgroup.android.inventory.CatalogActivity" />
         </activity>
         <provider
-            android:name="us.theparamountgroup.android.inventory.data.PetProvider"
+            android:name="us.theparamountgroup.android.inventory.data.ShellProvider"
             android:authorities="us.theparamountgroup.android.inventory"
             android:exported="false" />
     </application>

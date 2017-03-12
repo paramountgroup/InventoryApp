@@ -29,10 +29,10 @@ import us.theparamountgroup.android.inventory.data.ShellContract.PetEntry;
 /**
  * {@link ContentProvider} for Pets app.
  */
-public class PetProvider extends ContentProvider {
+public class ShellProvider extends ContentProvider {
 
     /** Tag for the log messages */
-    public static final String LOG_TAG = PetProvider.class.getSimpleName();
+    public static final String LOG_TAG = ShellProvider.class.getSimpleName();
 
     /** URI matcher code for the content URI for the pets table */
     private static final int PETS = 100;
@@ -69,11 +69,11 @@ public class PetProvider extends ContentProvider {
     }
 
     /** Database helper object */
-    private PetDbHelper mDbHelper;
+    private ShellDbHelper mDbHelper;
 
     @Override
     public boolean onCreate() {
-        mDbHelper = new PetDbHelper(getContext());
+        mDbHelper = new ShellDbHelper(getContext());
         return true;
     }
 

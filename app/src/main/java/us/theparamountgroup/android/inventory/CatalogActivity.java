@@ -43,7 +43,7 @@ public class CatalogActivity extends AppCompatActivity {
     public static CatalogActivity parentContext;
 
     /** Adapter for the ListView */
-    PetCursorAdapter mCursorAdapter;
+    ShellCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class CatalogActivity extends AppCompatActivity {
 
         // Setup an Adapter to create a list item for each row of pet data in the Cursor.
         // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
-        mCursorAdapter = new PetCursorAdapter(this, null);
+        mCursorAdapter = new ShellCursorAdapter(this, null);
         petListView.setAdapter(mCursorAdapter);
 
         // Setup the item click listener

@@ -29,19 +29,19 @@ import com.theparamountgroup.android.inventory.R;
 import us.theparamountgroup.android.inventory.data.ShellContract;
 
 /**
- * {@link PetCursorAdapter} is an adapter for a list or grid view
+ * {@link ShellCursorAdapter} is an adapter for a list or grid view
  * that uses a {@link Cursor} of pet data as its data source. This adapter knows
  * how to create list items for each row of pet data in the {@link Cursor}.
  */
-public class PetCursorAdapter extends CursorAdapter {
+public class ShellCursorAdapter extends CursorAdapter {
 
     /**
-     * Constructs a new {@link PetCursorAdapter}.
+     * Constructs a new {@link ShellCursorAdapter}.
      *
      * @param context The context
      * @param c       The cursor from which to get the data.
      */
-    public PetCursorAdapter(Context context, Cursor c) {
+    public ShellCursorAdapter(Context context, Cursor c) {
         super(context, c, 0 /* flags */);
     }
 
