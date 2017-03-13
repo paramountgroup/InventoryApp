@@ -35,14 +35,18 @@ import us.theparamountgroup.android.inventory.data.ShellContract.PetEntry;
 public class CatalogActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = ShellFragmentScallops.class.getSimpleName();
-    /** Identifier for the pet data loader */
+    /**
+     * Identifier for the pet data loader
+     */
     private static final int PET_LOADER = 0;
 
     private static String NO_PHOTO = "";
 
     public static CatalogActivity parentContext;
 
-    /** Adapter for the ListView */
+    /**
+     * Adapter for the ListView
+     */
     ShellCursorAdapter mCursorAdapter;
 
     @Override
@@ -50,7 +54,7 @@ public class CatalogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         parentContext = CatalogActivity.this;
-
+        Log.i(LOG_TAG, " In CatalogActivity - onCreate");
         // Find the view pager that will allow the user to swipe between fragments
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
 
@@ -69,55 +73,7 @@ public class CatalogActivity extends AppCompatActivity {
         //   3. Set the tab layout's tab names with the view pager's adapter's titles
         //      by calling onPageTitle()
         tabLayout.setupWithViewPager(viewPager);
-/*
-        // Setup FAB to open EditorActivity
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
-                startActivity(intent);
-            }
-        });
 
-        // Find the ListView which will be populated with the pet data
-        ListView petListView = (ListView) findViewById(R.id.list);
-
-        // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
-        View emptyView = findViewById(R.id.empty_view);
-        petListView.setEmptyView(emptyView);
-
-        // Setup an Adapter to create a list item for each row of pet data in the Cursor.
-        // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
-        mCursorAdapter = new ShellCursorAdapter(this, null);
-        petListView.setAdapter(mCursorAdapter);
-
-        // Setup the item click listener
-        petListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                // Create new intent to go to {@link EditorActivity}
-                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
-
-                // Form the content URI that represents the specific pet that was clicked on,
-                // by appending the "id" (passed as input to this method) onto the
-                // {@link PetEntry#CONTENT_URI}.
-                // For example, the URI would be "content://com.example.android.pets/pets/2"
-                // if the pet with ID 2 was clicked on.
-                Uri currentPetUri = ContentUris.withAppendedId(PetEntry.CONTENT_URI, id);
-
-                // Set the URI on the data field of the intent
-                intent.setData(currentPetUri);
-
-                // Launch the {@link EditorActivity} to display the data for the current pet.
-                startActivity(intent);
-            }
-        });
-
-        // Kick off the loader
-        getLoaderManager().initLoader(PET_LOADER, null, this);
-
-        */
     }
 
     /**
@@ -127,16 +83,16 @@ public class CatalogActivity extends AppCompatActivity {
         // Create a ContentValues object where column names are the keys,
         // and Toto's pet attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(PetEntry.COLUMN_SHELL_NAME, "Jingle");
+        values.put(PetEntry.COLUMN_SHELL_NAME, "Inserted Shell");
         values.put(PetEntry.COLUMN_SHELL_COLOR, "White");
         values.put(PetEntry.COLUMN_SHELL_HOLE, PetEntry.HOLE);
         values.put(PetEntry.COLUMN_SHELL_TYPE, PetEntry.TYPE_JINGLE);
-       // values.put(PetEntry.COLUMN_SHELL_PHOTO, NO_PHOTO);
+       //values.put(PetEntry.COLUMN_SHELL_PHOTO, NO_PHOTO);
 
         // Insert a new row for Toto into the provider using the ContentResolver.
         // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
         // into the pets database table.
-        // Receive the new content URI that will allow us to access Toto's data in the future.
+        // Receive the new content URI that will allow us to access inserted shell data in the future.
         Uri newUri = getContentResolver().insert(PetEntry.CONTENT_URI, values);
     }
 
