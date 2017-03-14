@@ -44,47 +44,47 @@ import com.theparamountgroup.android.inventory.R;
 import us.theparamountgroup.android.inventory.data.ShellContract;
 
 /**
- * Allows user to create a new pet or edit an existing one.
+ * Allows user to create a new shell or edit an existing one.
  */
 public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String LOG_TAG = EditorActivity.class.getSimpleName();
 
-    /** Identifier for the pet data loader */
-    private static final int EXISTING_PET_LOADER = 0;
+    /** Identifier for the shell data loader */
+    private static final int EXISTING_SHELL_LOADER = 0;
 
-    /** Content URI for the existing pet (null if it's a new pet) */
-    private Uri mCurrentPetUri;
+    /** Content URI for the existing shell (null if it's a new shell) */
+    private Uri mCurrentShellUri;
 
-    /** EditText field to enter the pet's name */
+    /** EditText field to enter the shell's name */
     private EditText mNameEditText;
 
     /** EditText field to enter the pet's breed */
-    private EditText mBreedEditText;
+    private EditText mColorEditText;
 
 
 
     /** EditText field to enter the pet's gender */
-    private Spinner mGenderSpinner;
+    private Spinner mHoleSpinner;
 
     /** EditText field to enter the type shell */
     private Spinner mTypeSpinner;
 
     /**
      * Gender of the pet. The possible valid values are in the ShellContract.java file:
-     * {@link ShellContract.PetEntry#HOLE_UNKNOWN}, {@link ShellContract.PetEntry#HOLE}, or
-     * {@link ShellContract.PetEntry#NO_HOLE}.
+     * {@link ShellContract.ShellEntry#HOLE_UNKNOWN}, {@link ShellContract.ShellEntry#HOLE}, or
+     * {@link ShellContract.ShellEntry#NO_HOLE}.
      */
-    private int mGender = ShellContract.PetEntry.HOLE_UNKNOWN;
+    private int mGender = ShellContract.ShellEntry.HOLE_UNKNOWN;
 
 
     /**
      * Gender of the pet. The possible valid values are in the ShellContract.java file:
-     * {@link ShellContract.PetEntry#HOLE_UNKNOWN}, {@link ShellContract.PetEntry#HOLE}, or
-     * {@link ShellContract.PetEntry#NO_HOLE}.
+     * {@link ShellContract.ShellEntry#HOLE_UNKNOWN}, {@link ShellContract.ShellEntry#HOLE}, or
+     * {@link ShellContract.ShellEntry#NO_HOLE}.
      */
-    private int mType = ShellContract.PetEntry.TYPE_SCALLOP;
+    private int mType = ShellContract.ShellEntry.TYPE_SCALLOP;
 
     /** Boolean flag that keeps track of whether the pet has been edited (true) or not (false) */
     private boolean mPetHasChanged = false;
@@ -109,11 +109,11 @@ public class EditorActivity extends AppCompatActivity implements
         // Examine the intent that was used to launch this activity,
         // in order to figure out if we're creating a new pet or editing an existing one.
         Intent intent = getIntent();
-        mCurrentPetUri = intent.getData();
+        mCurrentShellUri = intent.getData();
 
         // If the intent DOES NOT contain a pet content URI, then we know that we are
         // creating a new pet.
-        if (mCurrentPetUri == null) {
+        if (mCurrentShellUri == null) {
             // This is a new pet, so change the app bar to say "Add a Pet"
             setTitle(getString(R.string.editor_activity_title_new_pet));
 
@@ -126,23 +126,23 @@ public class EditorActivity extends AppCompatActivity implements
 
             // Initialize a loader to read the pet data from the database
             // and display the current values in the editor
-            getLoaderManager().initLoader(EXISTING_PET_LOADER, null, this);
+            getLoaderManager().initLoader(EXISTING_SHELL_LOADER, null, this);
         }
 
         // Find all relevant views that we will need to read user input from
         mNameEditText = (EditText) findViewById(R.id.edit_pet_name);
-        mBreedEditText = (EditText) findViewById(R.id.edit_pet_breed);
+        mColorEditText = (EditText) findViewById(R.id.edit_pet_breed);
 
-        mGenderSpinner = (Spinner) findViewById(R.id.spinner_gender);
+        mHoleSpinner = (Spinner) findViewById(R.id.spinner_gender);
         mTypeSpinner = (Spinner) findViewById(R.id.spinner_type);
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
         // or not, if the user tries to leave the editor without saving.
         mNameEditText.setOnTouchListener(mTouchListener);
-        mBreedEditText.setOnTouchListener(mTouchListener);
+        mColorEditText.setOnTouchListener(mTouchListener);
 
-        mGenderSpinner.setOnTouchListener(mTouchListener);
+        mHoleSpinner.setOnTouchListener(mTouchListener);
         mTypeSpinner.setOnTouchListener(mTouchListener);
 
         setupHoleSpinner();
@@ -162,20 +162,20 @@ public class EditorActivity extends AppCompatActivity implements
         genderSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         // Apply the adapter to the spinner
-        mGenderSpinner.setAdapter(genderSpinnerAdapter);
+        mHoleSpinner.setAdapter(genderSpinnerAdapter);
 
         // Set the integer mSelected to the constant values
-        mGenderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mHoleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                     if (selection.equals(getString(R.string.no_hole))) {
-                        mGender = ShellContract.PetEntry.HOLE;
+                        mGender = ShellContract.ShellEntry.HOLE;
                     } else if (selection.equals(getString(R.string.hole))) {
-                        mGender = ShellContract.PetEntry.NO_HOLE;
+                        mGender = ShellContract.ShellEntry.NO_HOLE;
                     } else {
-                        mGender = ShellContract.PetEntry.HOLE_UNKNOWN;
+                        mGender = ShellContract.ShellEntry.HOLE_UNKNOWN;
                     }
                 }
             }
@@ -183,7 +183,7 @@ public class EditorActivity extends AppCompatActivity implements
             // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mGender = ShellContract.PetEntry.HOLE_UNKNOWN;
+                mGender = ShellContract.ShellEntry.HOLE_UNKNOWN;
             }
         });
     }
@@ -210,14 +210,14 @@ public class EditorActivity extends AppCompatActivity implements
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                     if (selection.equals(getString(R.string.type_scallop))) {
-                        mType = ShellContract.PetEntry.TYPE_SCALLOP;
+                        mType = ShellContract.ShellEntry.TYPE_SCALLOP;
                     } else if (selection.equals(getString(R.string.type_jingle))) {
-                        mType = ShellContract.PetEntry.TYPE_JINGLE;
+                        mType = ShellContract.ShellEntry.TYPE_JINGLE;
                     } else if (selection.equals(getString(R.string.type_slipper))) {
-                        mType = ShellContract.PetEntry.TYPE_SLIPPER;
+                        mType = ShellContract.ShellEntry.TYPE_SLIPPER;
                     } else {
 
-                        mType = ShellContract.PetEntry.TYPE_SHARD;
+                        mType = ShellContract.ShellEntry.TYPE_SHARD;
                         Log.i(LOG_TAG," In type spinner and assigned mType to shard: " + mType);
                     }
                 }
@@ -226,25 +226,25 @@ public class EditorActivity extends AppCompatActivity implements
             // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mType = ShellContract.PetEntry.TYPE_SCALLOP;
+                mType = ShellContract.ShellEntry.TYPE_SCALLOP;
             }
         });
     }
     /**
      * Get user input from editor and save pet into database.
      */
-    private void savePet() {
+    private void saveShell() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
-        String breedString = mBreedEditText.getText().toString().trim();
+        String breedString = mColorEditText.getText().toString().trim();
 
 
-        // Check if this is supposed to be a new pet
+        // Check if this is supposed to be a new shell
         // and check if all the fields in the editor are blank
-        if (mCurrentPetUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(breedString) && mGender == ShellContract.PetEntry.HOLE_UNKNOWN) {
-            // Since no fields were modified, we can return early without creating a new pet.
+        if (mCurrentShellUri == null &&
+                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(breedString) && mGender == ShellContract.ShellEntry.HOLE_UNKNOWN) {
+            // Since no fields were modified, we can return early without creating a new shell.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
         }
@@ -252,16 +252,16 @@ public class EditorActivity extends AppCompatActivity implements
         // Create a ContentValues object where column names are the keys,
         // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
-        values.put(ShellContract.PetEntry.COLUMN_SHELL_NAME, nameString);
-        values.put(ShellContract.PetEntry.COLUMN_SHELL_COLOR, breedString);
-        values.put(ShellContract.PetEntry.COLUMN_SHELL_HOLE, mGender);
-        values.put(ShellContract.PetEntry.COLUMN_SHELL_TYPE, mType);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_NAME, nameString);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_COLOR, breedString);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_HOLE, mGender);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_TYPE, mType);
 
-        // Determine if this is a new or existing pet by checking if mCurrentPetUri is null or not
-        if (mCurrentPetUri == null) {
+        // Determine if this is a new or existing pet by checking if mCurrentShellUri is null or not
+        if (mCurrentShellUri == null) {
             // This is a NEW pet, so insert a new pet into the provider,
             // returning the content URI for the new pet.
-            Uri newUri = getContentResolver().insert(ShellContract.PetEntry.CONTENT_URI, values);
+            Uri newUri = getContentResolver().insert(ShellContract.ShellEntry.CONTENT_URI, values);
 
             // Show a toast message depending on whether or not the insertion was successful.
             if (newUri == null) {
@@ -274,11 +274,11 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         } else {
-            // Otherwise this is an EXISTING pet, so update the pet with content URI: mCurrentPetUri
+            // Otherwise this is an EXISTING pet, so update the pet with content URI: mCurrentShellUri
             // and pass in the new ContentValues. Pass in null for the selection and selection args
-            // because mCurrentPetUri will already identify the correct row in the database that
+            // because mCurrentShellUri will already identify the correct row in the database that
             // we want to modify.
-            int rowsAffected = getContentResolver().update(mCurrentPetUri, values, null, null);
+            int rowsAffected = getContentResolver().update(mCurrentShellUri, values, null, null);
 
             // Show a toast message depending on whether or not the update was successful.
             if (rowsAffected == 0) {
@@ -309,7 +309,7 @@ public class EditorActivity extends AppCompatActivity implements
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         // If this is a new pet, hide the "Delete" menu item.
-        if (mCurrentPetUri == null) {
+        if (mCurrentShellUri == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
             menuItem.setVisible(false);
         }
@@ -323,7 +323,7 @@ public class EditorActivity extends AppCompatActivity implements
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 // Save pet to database
-                savePet();
+                saveShell();
                 // Exit activity
                 finish();
                 return true;
@@ -391,15 +391,15 @@ public class EditorActivity extends AppCompatActivity implements
         // Since the editor shows all pet attributes, define a projection that contains
         // all columns from the pet table
         String[] projection = {
-                ShellContract.PetEntry._ID,
-                ShellContract.PetEntry.COLUMN_SHELL_NAME,
-                ShellContract.PetEntry.COLUMN_SHELL_COLOR,
-                ShellContract.PetEntry.COLUMN_SHELL_HOLE,
-                ShellContract.PetEntry.COLUMN_SHELL_TYPE};
+                ShellContract.ShellEntry._ID,
+                ShellContract.ShellEntry.COLUMN_SHELL_NAME,
+                ShellContract.ShellEntry.COLUMN_SHELL_COLOR,
+                ShellContract.ShellEntry.COLUMN_SHELL_HOLE,
+                ShellContract.ShellEntry.COLUMN_SHELL_TYPE};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
-                mCurrentPetUri,         // Query the content URI for the current pet
+                mCurrentShellUri,         // Query the content URI for the current pet
                 projection,             // Columns to include in the resulting Cursor
                 null,                   // No selection clause
                 null,                   // No selection arguments
@@ -417,10 +417,10 @@ public class EditorActivity extends AppCompatActivity implements
         // (This should be the only row in the cursor)
         if (cursor.moveToFirst()) {
             // Find the columns of pet attributes that we're interested in
-            int nameColumnIndex = cursor.getColumnIndex(ShellContract.PetEntry.COLUMN_SHELL_NAME);
-            int breedColumnIndex = cursor.getColumnIndex(ShellContract.PetEntry.COLUMN_SHELL_COLOR);
-            int genderColumnIndex = cursor.getColumnIndex(ShellContract.PetEntry.COLUMN_SHELL_HOLE);
-            int typeColumnIndex = cursor.getColumnIndex(ShellContract.PetEntry.COLUMN_SHELL_TYPE);
+            int nameColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_NAME);
+            int breedColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_COLOR);
+            int genderColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_HOLE);
+            int typeColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_TYPE);
 
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
@@ -430,32 +430,32 @@ public class EditorActivity extends AppCompatActivity implements
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
-            mBreedEditText.setText(color);
+            mColorEditText.setText(color);
 
 
             // Gender is a dropdown spinner, so map the constant value from the database
             // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
             // Then call setSelection() so that option is displayed on screen as the current selection.
             switch (gender) {
-                case ShellContract.PetEntry.HOLE:
-                    mGenderSpinner.setSelection(1);
+                case ShellContract.ShellEntry.HOLE:
+                    mHoleSpinner.setSelection(1);
                     break;
-                case ShellContract.PetEntry.NO_HOLE:
-                    mGenderSpinner.setSelection(2);
+                case ShellContract.ShellEntry.NO_HOLE:
+                    mHoleSpinner.setSelection(2);
                     break;
                 default:
-                    mGenderSpinner.setSelection(0);
+                    mHoleSpinner.setSelection(0);
                     break;
             }
 
             switch (type) {
-                case ShellContract.PetEntry.TYPE_SHARD:
+                case ShellContract.ShellEntry.TYPE_SHARD:
                     mTypeSpinner.setSelection(3);
                     break;
-                case ShellContract.PetEntry.TYPE_JINGLE:
+                case ShellContract.ShellEntry.TYPE_JINGLE:
                     mTypeSpinner.setSelection(1);
                     break;
-                case ShellContract.PetEntry.TYPE_SLIPPER:
+                case ShellContract.ShellEntry.TYPE_SLIPPER:
                     mTypeSpinner.setSelection(2);
                     break;
                 default:
@@ -469,9 +469,9 @@ public class EditorActivity extends AppCompatActivity implements
     public void onLoaderReset(Loader<Cursor> loader) {
         // If the loader is invalidated, clear out all the data from the input fields.
         mNameEditText.setText("");
-        mBreedEditText.setText("");
+        mColorEditText.setText("");
 
-        mGenderSpinner.setSelection(0); // Select "Unknown" gender
+        mHoleSpinner.setSelection(0); // Select "Unknown" gender
         mTypeSpinner.setSelection(0); // Select "Scallop" to type
     }
 
@@ -538,11 +538,11 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private void deletePet() {
         // Only perform the delete if this is an existing pet.
-        if (mCurrentPetUri != null) {
+        if (mCurrentShellUri != null) {
             // Call the ContentResolver to delete the pet at the given content URI.
-            // Pass in null for the selection and selection args because the mCurrentPetUri
+            // Pass in null for the selection and selection args because the mCurrentShellUri
             // content URI already identifies the pet that we want.
-            int rowsDeleted = getContentResolver().delete(mCurrentPetUri, null, null);
+            int rowsDeleted = getContentResolver().delete(mCurrentShellUri, null, null);
 
             // Show a toast message depending on whether or not the delete was successful.
             if (rowsDeleted == 0) {

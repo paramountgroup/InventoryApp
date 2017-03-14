@@ -77,8 +77,8 @@ public class ShellCursorAdapter extends CursorAdapter {
         TextView summaryTextView = (TextView) view.findViewById(R.id.summary);
 
         // Find the columns of pet attributes that we're interested in
-        int nameColumnIndex = cursor.getColumnIndex(ShellContract.PetEntry.COLUMN_SHELL_NAME);
-        int breedColumnIndex = cursor.getColumnIndex(ShellContract.PetEntry.COLUMN_SHELL_COLOR);
+        int nameColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_NAME);
+        int breedColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_COLOR);
 
         // Read the pet attributes from the Cursor for the current pet
         String petName = cursor.getString(nameColumnIndex);

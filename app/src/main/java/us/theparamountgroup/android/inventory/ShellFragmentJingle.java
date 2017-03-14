@@ -83,10 +83,10 @@ public class ShellFragmentJingle extends Fragment implements LoaderManager.Loade
 
                 // Form the content URI that represents the specific pet that was clicked on,
                 // by appending the "id" (passed as input to this method) onto the
-                // {@link PetEntry#CONTENT_URI}.
+                // {@link ShellEntry#CONTENT_URI}.
                 // For example, the URI would be "content://com.example.android.pets/pets/2"
                 // if the pet with ID 2 was clicked on.
-                Uri currentPetUri = ContentUris.withAppendedId(ShellContract.PetEntry.CONTENT_URI, id);
+                Uri currentPetUri = ContentUris.withAppendedId(ShellContract.ShellEntry.CONTENT_URI, id);
 
                 // Set the URI on the data field of the intent
                 intent.setData(currentPetUri);
@@ -110,9 +110,9 @@ public class ShellFragmentJingle extends Fragment implements LoaderManager.Loade
 
         // Define a projection that specifies the columns from the table we care about.
         String[] projection = {
-                ShellContract.PetEntry._ID,
-                ShellContract.PetEntry.COLUMN_SHELL_NAME,
-                ShellContract.PetEntry.COLUMN_SHELL_COLOR};
+                ShellContract.ShellEntry._ID,
+                ShellContract.ShellEntry.COLUMN_SHELL_NAME,
+                ShellContract.ShellEntry.COLUMN_SHELL_COLOR};
 
         String[] jingleArgument = {
                 "1"
@@ -120,9 +120,9 @@ public class ShellFragmentJingle extends Fragment implements LoaderManager.Loade
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new android.support.v4.content.CursorLoader(getContext(),   // Parent activity context
-                ShellContract.PetEntry.CONTENT_URI,   // Provider content URI to query
+                ShellContract.ShellEntry.CONTENT_URI,   // Provider content URI to query
                 projection,             // Columns to include in the resulting Cursor
-                ShellContract.PetEntry.COLUMN_SHELL_TYPE + "=?", //"name",                   // No selection clause
+                ShellContract.ShellEntry.COLUMN_SHELL_TYPE + "=?", //"name",                   // No selection clause
                 jingleArgument, //jingleSelection,                   // No selection arguments
                 null);                  // Default sort order
     }

@@ -27,18 +27,19 @@ import android.view.MenuItem;
 
 import com.theparamountgroup.android.inventory.R;
 
-import us.theparamountgroup.android.inventory.data.ShellContract.PetEntry;
+import us.theparamountgroup.android.inventory.data.ShellContract;
+import us.theparamountgroup.android.inventory.data.ShellContract.ShellEntry;
 
 /**
- * Displays list of pets that were entered and stored in the app.
+ * Displays list of shells that were entered and stored in the app.
  */
 public class CatalogActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = ShellFragmentScallops.class.getSimpleName();
     /**
-     * Identifier for the pet data loader
+     * Identifier for the shell data loader
      */
-    private static final int PET_LOADER = 0;
+   // private static final int PET_LOADER = 0;
 
     private static String NO_PHOTO = "";
 
@@ -77,31 +78,31 @@ public class CatalogActivity extends AppCompatActivity {
     }
 
     /**
-     * Helper method to insert hardcoded pet data into the database. For debugging purposes only.
+     * Helper method to insert hardcoded shell data into the database. For debugging purposes only.
      */
-    private void insertPet() {
+    private void insertShell() {
         // Create a ContentValues object where column names are the keys,
         // and Toto's pet attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(PetEntry.COLUMN_SHELL_NAME, "Inserted Shell");
-        values.put(PetEntry.COLUMN_SHELL_COLOR, "White");
-        values.put(PetEntry.COLUMN_SHELL_HOLE, PetEntry.HOLE);
-        values.put(PetEntry.COLUMN_SHELL_TYPE, PetEntry.TYPE_JINGLE);
-        values.put(PetEntry.COLUMN_SHELL_PHOTO, NO_PHOTO);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_NAME, "Inserted Shell");
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_COLOR, "White");
+        values.put(ShellEntry.COLUMN_SHELL_HOLE, ShellContract.ShellEntry.HOLE);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_TYPE, ShellContract.ShellEntry.TYPE_JINGLE);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_PHOTO, NO_PHOTO);
 
-        // Insert a new row for Toto into the provider using the ContentResolver.
-        // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
-        // into the pets database table.
+        // Insert a new row for "Inserted Shell" into the provider using the ContentResolver.
+        // Use the {@link ShellEntry#CONTENT_URI} to indicate that we want to insert
+        // into the shells database table.
         // Receive the new content URI that will allow us to access inserted shell data in the future.
-        Uri newUri = getContentResolver().insert(PetEntry.CONTENT_URI, values);
+        Uri newUri = getContentResolver().insert(ShellContract.ShellEntry.CONTENT_URI, values);
     }
 
     /**
-     * Helper method to delete all pets in the database.
+     * Helper method to delete all shells in the database.
      */
-    private void deleteAllPets() {
-        int rowsDeleted = getContentResolver().delete(PetEntry.CONTENT_URI, null, null);
-        Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
+    private void deleteAllShells() {
+        int rowsDeleted = getContentResolver().delete(ShellContract.ShellEntry.CONTENT_URI, null, null);
+        Log.v("CatalogActivity", rowsDeleted + " rows deleted from shell database");
     }
 
     @Override
@@ -118,32 +119,15 @@ public class CatalogActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             // Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
-                insertPet();
+                insertShell();
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
-                deleteAllPets();
+                deleteAllShells();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-/*
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        // Define a projection that specifies the columns from the table we care about.
-        String[] projection = {
-                PetEntry._ID,
-                PetEntry.COLUMN_SHELL_NAME,
-                PetEntry.COLUMN_SHELL_COLOR };
 
-        // This loader will execute the ContentProvider's query method on a background thread
-        return new CursorLoader(this,   // Parent activity context
-                PetEntry.CONTENT_URI,   // Provider content URI to query
-                projection,             // Columns to include in the resulting Cursor
-                null,                   // No selection clause
-                null,                   // No selection arguments
-                null);                  // Default sort order
-    }
-    */
 
 }

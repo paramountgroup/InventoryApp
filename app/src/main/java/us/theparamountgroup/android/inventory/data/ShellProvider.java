@@ -24,7 +24,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
-import us.theparamountgroup.android.inventory.data.ShellContract.PetEntry;
+import us.theparamountgroup.android.inventory.data.ShellContract.ShellEntry;
 
 /**
  * {@link ContentProvider} for Shells app.
@@ -97,7 +97,7 @@ public class ShellProvider extends ContentProvider {
                 // For the SHELLS code, query the shells table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
                 // could contain multiple rows of the shells table.
-                cursor = database.query(PetEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(ShellContract.ShellEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case SHELL_ID:
@@ -109,12 +109,12 @@ public class ShellProvider extends ContentProvider {
                 // For every "?" in the selection, we need to have an element in the selection
                 // arguments that will fill in the "?". Since we have 1 question mark in the
                 // selection, we have 1 String in the selection arguments' String array.
-                selection = PetEntry._ID + "=?";
+                selection = ShellEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
 
                 // This will perform a query on the pets table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
-                cursor = database.query(PetEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(ShellContract.ShellEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             default:
@@ -147,14 +147,14 @@ public class ShellProvider extends ContentProvider {
      */
     private Uri insertShell(Uri uri, ContentValues values) {
         // Check that the name is not null
-        String name = values.getAsString(PetEntry.COLUMN_SHELL_NAME);
+        String name = values.getAsString(ShellContract.ShellEntry.COLUMN_SHELL_NAME);
         if (name == null) {
             throw new IllegalArgumentException("Shell requires a name");
         }
 
         // Check that the hole type is valid
-        Integer hole = values.getAsInteger(PetEntry.COLUMN_SHELL_HOLE);
-        if (hole == null || !PetEntry.isValidHole(hole)) {
+        Integer hole = values.getAsInteger(ShellContract.ShellEntry.COLUMN_SHELL_HOLE);
+        if (hole == null || !ShellContract.ShellEntry.isValidHole(hole)) {
             throw new IllegalArgumentException("Shell requires valid Hole type");
         }
 
@@ -166,7 +166,7 @@ public class ShellProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         // Insert the new pet with the given values
-        long id = database.insert(PetEntry.TABLE_NAME, null, values);
+        long id = database.insert(ShellContract.ShellEntry.TABLE_NAME, null, values);
         // If the ID is -1, then the insertion failed. Log an error and return null.
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
@@ -191,7 +191,7 @@ public class ShellProvider extends ContentProvider {
                 // For the SHELL_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
-                selection = PetEntry._ID + "=?";
+                selection = ShellEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return updatePet(uri, contentValues, selection, selectionArgs);
             default:
@@ -205,30 +205,30 @@ public class ShellProvider extends ContentProvider {
      * Return the number of rows that were successfully updated.
      */
     private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        // If the {@link PetEntry#COLUMN_SHELL_NAME} key is present,
+        // If the {@link ShellEntry#COLUMN_SHELL_NAME} key is present,
         // check that the name value is not null.
-        if (values.containsKey(PetEntry.COLUMN_SHELL_NAME)) {
-            String name = values.getAsString(PetEntry.COLUMN_SHELL_NAME);
+        if (values.containsKey(ShellContract.ShellEntry.COLUMN_SHELL_NAME)) {
+            String name = values.getAsString(ShellContract.ShellEntry.COLUMN_SHELL_NAME);
             if (name == null) {
                 throw new IllegalArgumentException("Shell requires a name");
             }
         }
 
-        // If the {@link PetEntry#COLUMN_SHELL_HOLE} key is present,
+        // If the {@link ShellEntry#COLUMN_SHELL_HOLE} key is present,
         // check that the gender value is valid.
-        if (values.containsKey(PetEntry.COLUMN_SHELL_HOLE)) {
-            Integer gender = values.getAsInteger(PetEntry.COLUMN_SHELL_HOLE);
-            if (gender == null || !PetEntry.isValidHole(gender)) {
+        if (values.containsKey(ShellContract.ShellEntry.COLUMN_SHELL_HOLE)) {
+            Integer gender = values.getAsInteger(ShellContract.ShellEntry.COLUMN_SHELL_HOLE);
+            if (gender == null || !ShellContract.ShellEntry.isValidHole(gender)) {
                 throw new IllegalArgumentException("Shell requires valid Hole Type");
             }
         }
 
-        // If the {@link PetEntry#COLUMN_SHELL_TYPE} key is present,
+        // If the {@link ShellEntry#COLUMN_SHELL_TYPE} key is present,
         // check that the weight value is valid.
-        if (values.containsKey(PetEntry.COLUMN_SHELL_TYPE)) {
+        if (values.containsKey(ShellContract.ShellEntry.COLUMN_SHELL_TYPE)) {
             // Check that the weight is greater than or equal to 0 kg
-            Integer shellType = values.getAsInteger(PetEntry.COLUMN_SHELL_TYPE);
-            if (shellType == null || !PetEntry.isValidType(shellType)) {
+            Integer shellType = values.getAsInteger(ShellContract.ShellEntry.COLUMN_SHELL_TYPE);
+            if (shellType == null || !ShellContract.ShellEntry.isValidType(shellType)) {
                 throw new IllegalArgumentException("Shell requires valid Shell Type");
             }
         }
@@ -244,7 +244,7 @@ public class ShellProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         // Perform the update on the database and get the number of rows affected
-        int rowsUpdated = database.update(PetEntry.TABLE_NAME, values, selection, selectionArgs);
+        int rowsUpdated = database.update(ShellContract.ShellEntry.TABLE_NAME, values, selection, selectionArgs);
 
         // If 1 or more rows were updated, then notify all listeners that the data at the
         // given URI has changed
@@ -268,13 +268,13 @@ public class ShellProvider extends ContentProvider {
         switch (match) {
             case SHELLS:
                 // Delete all rows that match the selection and selection args
-                rowsDeleted = database.delete(PetEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(ShellContract.ShellEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             case SHELL_ID:
                 // Delete a single row given by the ID in the URI
-                selection = PetEntry._ID + "=?";
+                selection = ShellContract.ShellEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                rowsDeleted = database.delete(PetEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(ShellContract.ShellEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
@@ -295,9 +295,9 @@ public class ShellProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case SHELLS:
-                return PetEntry.CONTENT_LIST_TYPE;
+                return ShellContract.ShellEntry.CONTENT_LIST_TYPE;
             case SHELL_ID:
-                return PetEntry.CONTENT_ITEM_TYPE;
+                return ShellContract.ShellEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }

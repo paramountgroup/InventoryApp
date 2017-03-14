@@ -19,8 +19,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import us.theparamountgroup.android.inventory.data.ShellContract.PetEntry;
-
 /**
  * Database helper for Pets app. Manages database creation and version management.
  */
@@ -51,13 +49,13 @@ public class ShellDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create a String that contains the SQL statement to create the pets table
-        String SQL_CREATE_PETS_TABLE =  "CREATE TABLE " + PetEntry.TABLE_NAME + " ("
-                + PetEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + PetEntry.COLUMN_SHELL_NAME + " TEXT NOT NULL, "
-                + PetEntry.COLUMN_SHELL_COLOR + " TEXT, "
-                + PetEntry.COLUMN_SHELL_HOLE + " INTEGER NOT NULL, "
-                + PetEntry.COLUMN_SHELL_TYPE + " INTEGER NOT NULL,"
-                + PetEntry.COLUMN_SHELL_PHOTO + " TEXT);";
+        String SQL_CREATE_PETS_TABLE =  "CREATE TABLE " + ShellContract.ShellEntry.TABLE_NAME + " ("
+                + ShellContract.ShellEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + ShellContract.ShellEntry.COLUMN_SHELL_NAME + " TEXT NOT NULL, "
+                + ShellContract.ShellEntry.COLUMN_SHELL_COLOR + " TEXT, "
+                + ShellContract.ShellEntry.COLUMN_SHELL_HOLE + " INTEGER NOT NULL, "
+                + ShellContract.ShellEntry.COLUMN_SHELL_TYPE + " INTEGER NOT NULL,"
+                + ShellContract.ShellEntry.COLUMN_SHELL_PHOTO + " TEXT);";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_PETS_TABLE);
