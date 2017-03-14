@@ -62,7 +62,7 @@
     <string name="editor_delete_pet_successful">Shell deleted</string>
 
     <!-- Toast message in editor when current pet has failed to be deleted [CHAR LIMIT=NONE] -->
-    <string name="editor_delete_pet_failed">Error with deleting shell</string>
+    <string name="editor_delete_shell_failed">Error with deleting shell</string>
 
     <!-- Dialog message to ask the user to confirm deleting the current pet [CHAR LIMIT=NONE] -->
     <string name="delete_dialog_msg">Delete this shell?</string>

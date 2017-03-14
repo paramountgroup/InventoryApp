@@ -60,43 +60,43 @@ public class EditorActivity extends AppCompatActivity implements
     /** EditText field to enter the shell's name */
     private EditText mNameEditText;
 
-    /** EditText field to enter the pet's breed */
+    /** EditText field to enter the shell's color */
     private EditText mColorEditText;
 
 
 
-    /** EditText field to enter the pet's gender */
+    /** EditText field to enter if the shell has a hole  */
     private Spinner mHoleSpinner;
 
     /** EditText field to enter the type shell */
     private Spinner mTypeSpinner;
 
     /**
-     * Gender of the pet. The possible valid values are in the ShellContract.java file:
+     * If the shell has hole. The possible valid values are in the ShellContract.java file:
      * {@link ShellContract.ShellEntry#HOLE_UNKNOWN}, {@link ShellContract.ShellEntry#HOLE}, or
      * {@link ShellContract.ShellEntry#NO_HOLE}.
      */
-    private int mGender = ShellContract.ShellEntry.HOLE_UNKNOWN;
+    private int mHole = ShellContract.ShellEntry.HOLE_UNKNOWN;
 
 
     /**
-     * Gender of the pet. The possible valid values are in the ShellContract.java file:
-     * {@link ShellContract.ShellEntry#HOLE_UNKNOWN}, {@link ShellContract.ShellEntry#HOLE}, or
-     * {@link ShellContract.ShellEntry#NO_HOLE}.
+     * Type of Shell. The possible valid values are in the ShellContract.java file:
+     * {@link ShellContract.ShellEntry#TYPE_SCALLOP}, {@link ShellContract.ShellEntry#TYPE_JINGLE},
+     * {@link ShellContract.ShellEntry#TYPE_SLIPPER},{@link ShellContract.ShellEntry#TYPE_SHARD}.
      */
     private int mType = ShellContract.ShellEntry.TYPE_SCALLOP;
 
-    /** Boolean flag that keeps track of whether the pet has been edited (true) or not (false) */
-    private boolean mPetHasChanged = false;
+    /** Boolean flag that keeps track of whether the shell has been edited (true) or not (false) */
+    private boolean mShellHasChanged = false;
 
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
-     * the view, and we change the mPetHasChanged boolean to true.
+     * the view, and we change the mShellHasChanged boolean to true.
      */
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            mPetHasChanged = true;
+            mShellHasChanged = true;
             return false;
         }
     };
@@ -107,33 +107,33 @@ public class EditorActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_editor);
 
         // Examine the intent that was used to launch this activity,
-        // in order to figure out if we're creating a new pet or editing an existing one.
+        // in order to figure out if we're creating a new shell or editing an existing one.
         Intent intent = getIntent();
         mCurrentShellUri = intent.getData();
 
-        // If the intent DOES NOT contain a pet content URI, then we know that we are
-        // creating a new pet.
+        // If the intent DOES NOT contain a shell content URI, then we know that we are
+        // creating a new shell.
         if (mCurrentShellUri == null) {
-            // This is a new pet, so change the app bar to say "Add a Pet"
+            // This is a new shell, so change the app bar to say "Add a Shell"
             setTitle(getString(R.string.editor_activity_title_new_pet));
 
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
-            // (It doesn't make sense to delete a pet that hasn't been created yet.)
+            // (It doesn't make sense to delete a shell that hasn't been created yet.)
             invalidateOptionsMenu();
         } else {
-            // Otherwise this is an existing pet, so change app bar to say "Edit Pet"
+            // Otherwise this is an existing shell, so change app bar to say "Edit Shell"
             setTitle(getString(R.string.editor_activity_title_edit_pet));
 
-            // Initialize a loader to read the pet data from the database
+            // Initialize a loader to read the shell data from the database
             // and display the current values in the editor
             getLoaderManager().initLoader(EXISTING_SHELL_LOADER, null, this);
         }
 
         // Find all relevant views that we will need to read user input from
-        mNameEditText = (EditText) findViewById(R.id.edit_pet_name);
-        mColorEditText = (EditText) findViewById(R.id.edit_pet_breed);
+        mNameEditText = (EditText) findViewById(R.id.edit_shell_name);
+        mColorEditText = (EditText) findViewById(R.id.edit_shell_color);
 
-        mHoleSpinner = (Spinner) findViewById(R.id.spinner_gender);
+        mHoleSpinner = (Spinner) findViewById(R.id.spinner_hole);
         mTypeSpinner = (Spinner) findViewById(R.id.spinner_type);
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
@@ -150,7 +150,7 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
     /**
-     * Setup the dropdown spinner that allows the user to select the gender of the pet.
+     * Setup the dropdown spinner that allows the user to select if the shell has a hole.
      */
     private void setupHoleSpinner() {
         // Create adapter for spinner. The list options are from the String array it will use
@@ -171,11 +171,11 @@ public class EditorActivity extends AppCompatActivity implements
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                     if (selection.equals(getString(R.string.no_hole))) {
-                        mGender = ShellContract.ShellEntry.HOLE;
+                        mHole = ShellContract.ShellEntry.HOLE;
                     } else if (selection.equals(getString(R.string.hole))) {
-                        mGender = ShellContract.ShellEntry.NO_HOLE;
+                        mHole = ShellContract.ShellEntry.NO_HOLE;
                     } else {
-                        mGender = ShellContract.ShellEntry.HOLE_UNKNOWN;
+                        mHole = ShellContract.ShellEntry.HOLE_UNKNOWN;
                     }
                 }
             }
@@ -183,13 +183,13 @@ public class EditorActivity extends AppCompatActivity implements
             // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mGender = ShellContract.ShellEntry.HOLE_UNKNOWN;
+                mHole = ShellContract.ShellEntry.HOLE_UNKNOWN;
             }
         });
     }
 
     /**
-     * Setup the dropdown spinner that allows the user to select the gender of the pet.
+     * Setup the dropdown spinner that allows the user to select the type of shell.
      */
     private void setupTypeSpinner() {
         // Create adapter for spinner. The list options are from the String array it will use
@@ -237,13 +237,13 @@ public class EditorActivity extends AppCompatActivity implements
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
-        String breedString = mColorEditText.getText().toString().trim();
+        String colorString = mColorEditText.getText().toString().trim();
 
 
         // Check if this is supposed to be a new shell
         // and check if all the fields in the editor are blank
         if (mCurrentShellUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(breedString) && mGender == ShellContract.ShellEntry.HOLE_UNKNOWN) {
+                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(colorString) && mHole == ShellContract.ShellEntry.HOLE_UNKNOWN) {
             // Since no fields were modified, we can return early without creating a new shell.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
@@ -253,14 +253,14 @@ public class EditorActivity extends AppCompatActivity implements
         // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_NAME, nameString);
-        values.put(ShellContract.ShellEntry.COLUMN_SHELL_COLOR, breedString);
-        values.put(ShellContract.ShellEntry.COLUMN_SHELL_HOLE, mGender);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_COLOR, colorString);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_HOLE, mHole);
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_TYPE, mType);
 
-        // Determine if this is a new or existing pet by checking if mCurrentShellUri is null or not
+        // Determine if this is a new or existing shell by checking if mCurrentShellUri is null or not
         if (mCurrentShellUri == null) {
-            // This is a NEW pet, so insert a new pet into the provider,
-            // returning the content URI for the new pet.
+            // This is a NEW shell, so insert a new shell into the provider,
+            // returning the content URI for the new shell.
             Uri newUri = getContentResolver().insert(ShellContract.ShellEntry.CONTENT_URI, values);
 
             // Show a toast message depending on whether or not the insertion was successful.
@@ -274,7 +274,7 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         } else {
-            // Otherwise this is an EXISTING pet, so update the pet with content URI: mCurrentShellUri
+            // Otherwise this is an EXISTING shell, so update the shell with content URI: mCurrentShellUri
             // and pass in the new ContentValues. Pass in null for the selection and selection args
             // because mCurrentShellUri will already identify the correct row in the database that
             // we want to modify.
@@ -308,7 +308,7 @@ public class EditorActivity extends AppCompatActivity implements
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        // If this is a new pet, hide the "Delete" menu item.
+        // If this is a new shell, hide the "Delete" menu item.
         if (mCurrentShellUri == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
             menuItem.setVisible(false);
@@ -322,7 +322,7 @@ public class EditorActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                // Save pet to database
+                // Save shell to database
                 saveShell();
                 // Exit activity
                 finish();
@@ -334,9 +334,9 @@ public class EditorActivity extends AppCompatActivity implements
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
-                // If the pet hasn't changed, continue with navigating up to parent activity
+                // If the shell hasn't changed, continue with navigating up to parent activity
                 // which is the {@link CatalogActivity}.
-                if (!mPetHasChanged) {
+                if (!mShellHasChanged) {
                     NavUtils.navigateUpFromSameTask(EditorActivity.this);
                     return true;
                 }
@@ -365,8 +365,8 @@ public class EditorActivity extends AppCompatActivity implements
      */
     @Override
     public void onBackPressed() {
-        // If the pet hasn't changed, continue with handling back button press
-        if (!mPetHasChanged) {
+        // If the shell hasn't changed, continue with handling back button press
+        if (!mShellHasChanged) {
             super.onBackPressed();
             return;
         }
@@ -388,7 +388,7 @@ public class EditorActivity extends AppCompatActivity implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        // Since the editor shows all pet attributes, define a projection that contains
+        // Since the editor shows all shell attributes, define a projection that contains
         // all columns from the pet table
         String[] projection = {
                 ShellContract.ShellEntry._ID,
@@ -399,7 +399,7 @@ public class EditorActivity extends AppCompatActivity implements
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
-                mCurrentShellUri,         // Query the content URI for the current pet
+                mCurrentShellUri,         // Query the content URI for the current shell
                 projection,             // Columns to include in the resulting Cursor
                 null,                   // No selection clause
                 null,                   // No selection arguments
@@ -416,7 +416,7 @@ public class EditorActivity extends AppCompatActivity implements
         // Proceed with moving to the first row of the cursor and reading data from it
         // (This should be the only row in the cursor)
         if (cursor.moveToFirst()) {
-            // Find the columns of pet attributes that we're interested in
+            // Find the columns of Shell attributes that we're interested in
             int nameColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_NAME);
             int breedColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_COLOR);
             int genderColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_HOLE);
@@ -425,7 +425,7 @@ public class EditorActivity extends AppCompatActivity implements
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
             String color = cursor.getString(breedColumnIndex);
-            int gender = cursor.getInt(genderColumnIndex);
+            int hole = cursor.getInt(genderColumnIndex);
             int type = cursor.getInt(typeColumnIndex);
 
             // Update the views on the screen with the values from the database
@@ -433,10 +433,10 @@ public class EditorActivity extends AppCompatActivity implements
             mColorEditText.setText(color);
 
 
-            // Gender is a dropdown spinner, so map the constant value from the database
-            // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
+            // Hole is a dropdown spinner, so map the constant value from the database
+            // into one of the dropdown options (0 is Unknown, 1 is Hole, 2 is No Hole).
             // Then call setSelection() so that option is displayed on screen as the current selection.
-            switch (gender) {
+            switch (hole) {
                 case ShellContract.ShellEntry.HOLE:
                     mHoleSpinner.setSelection(1);
                     break;
@@ -447,6 +447,10 @@ public class EditorActivity extends AppCompatActivity implements
                     mHoleSpinner.setSelection(0);
                     break;
             }
+
+            // type is a dropdown spinner, so map the constant value from the database
+            // into one of the dropdown options (0 is Scallop, 1 is Jingle, 2 is Slipper, 3 is Shard).
+            // Then call setSelection() so that option is displayed on screen as the current selection.
 
             switch (type) {
                 case ShellContract.ShellEntry.TYPE_SHARD:
@@ -471,7 +475,7 @@ public class EditorActivity extends AppCompatActivity implements
         mNameEditText.setText("");
         mColorEditText.setText("");
 
-        mHoleSpinner.setSelection(0); // Select "Unknown" gender
+        mHoleSpinner.setSelection(0); // Select "Unknown" hole
         mTypeSpinner.setSelection(0); // Select "Scallop" to type
     }
 
@@ -514,14 +518,14 @@ public class EditorActivity extends AppCompatActivity implements
         builder.setMessage(R.string.delete_dialog_msg);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the pet.
-                deletePet();
+                // User clicked the "Delete" button, so delete the shell.
+                deleteShell();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the pet.
+                // and continue editing the shell.
                 if (dialog != null) {
                     dialog.dismiss();
                 }
@@ -534,20 +538,20 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
     /**
-     * Perform the deletion of the pet in the database.
+     * Perform the deletion of the shell in the database.
      */
-    private void deletePet() {
-        // Only perform the delete if this is an existing pet.
+    private void deleteShell() {
+        // Only perform the delete if this is an existing shell.
         if (mCurrentShellUri != null) {
-            // Call the ContentResolver to delete the pet at the given content URI.
+            // Call the ContentResolver to delete the shell at the given content URI.
             // Pass in null for the selection and selection args because the mCurrentShellUri
-            // content URI already identifies the pet that we want.
+            // content URI already identifies the shell that we want.
             int rowsDeleted = getContentResolver().delete(mCurrentShellUri, null, null);
 
             // Show a toast message depending on whether or not the delete was successful.
             if (rowsDeleted == 0) {
                 // If no rows were deleted, then there was an error with the delete.
-                Toast.makeText(this, getString(R.string.editor_delete_pet_failed),
+                Toast.makeText(this, getString(R.string.editor_delete_shell_failed),
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the delete was successful and we can display a toast.

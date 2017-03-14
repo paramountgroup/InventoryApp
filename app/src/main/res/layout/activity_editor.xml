@@ -41,14 +41,14 @@
 
             <!-- Name field -->
             <EditText
-                android:id="@+id/edit_pet_name"
+                android:id="@+id/edit_shell_name"
                 android:hint="@string/hint_shell_name"
                 android:inputType="textCapWords"
                 style="@style/EditorFieldStyle" />
 
             <!-- Breed field -->
             <EditText
-                android:id="@+id/edit_pet_breed"
+                android:id="@+id/edit_shell_color"
                 android:hint="@string/hint_shell_color"
                 android:inputType="textCapWords"
                 style="@style/EditorFieldStyle" />
@@ -76,7 +76,7 @@
 
             <!-- Gender drop-down spinner -->
             <Spinner
-                android:id="@+id/spinner_gender"
+                android:id="@+id/spinner_hole"
                 android:layout_height="48dp"
                 android:layout_width="wrap_content"
                 android:paddingRight="16dp"
