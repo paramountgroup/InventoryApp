@@ -112,8 +112,8 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
                 ShellContract.ShellEntry._ID,
                 ShellContract.ShellEntry.COLUMN_SHELL_NAME,
                 ShellContract.ShellEntry.COLUMN_SHELL_COLOR,
-                ShellContract.ShellEntry.COLUMN_SHELL_HOLE};
-           //     ShellContract.ShellEntry.COLUMN_SHELL_PHOTO};
+                ShellContract.ShellEntry.COLUMN_SHELL_HOLE,
+                ShellContract.ShellEntry.COLUMN_SHELL_PHOTO};
 
 
         String[] scallopArgument = {
@@ -133,7 +133,7 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
         Log.i(LOG_TAG, "in onLoadFinished");
 
-        // Update {@link ShellCursorAdapter} with this new cursor containing updated pet data
+        // Update {@link ShellCursorAdapter} with this new cursor containing updated shell data
         mCursorAdapter.swapCursor(data);
     }
 

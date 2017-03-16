@@ -13,6 +13,13 @@
 <manifest package="com.theparamountgroup.android.inventory"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -40,6 +47,16 @@
             android:name="us.theparamountgroup.android.inventory.data.ShellProvider"
             android:authorities="us.theparamountgroup.android.inventory"
             android:exported="false" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="us.theparamountgroup.android.inventory.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
     </application>
 
 </manifest>

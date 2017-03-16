@@ -109,7 +109,8 @@ public class ShellFragmentShard extends Fragment implements LoaderManager.Loader
         String[] projection = {
                 ShellContract.ShellEntry._ID,
                 ShellContract.ShellEntry.COLUMN_SHELL_NAME,
-                ShellContract.ShellEntry.COLUMN_SHELL_COLOR};
+                ShellContract.ShellEntry.COLUMN_SHELL_COLOR,
+                ShellContract.ShellEntry.COLUMN_SHELL_PHOTO};
 
         String[] shardArgument = {
                 "3"

@@ -109,7 +109,8 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
         String[] projection = {
                 ShellContract.ShellEntry._ID,
                 ShellContract.ShellEntry.COLUMN_SHELL_NAME,
-                ShellContract.ShellEntry.COLUMN_SHELL_COLOR};
+                ShellContract.ShellEntry.COLUMN_SHELL_COLOR,
+                ShellContract.ShellEntry.COLUMN_SHELL_PHOTO};
 
         String[] slipperArgument = {
                 "2"

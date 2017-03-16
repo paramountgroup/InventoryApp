@@ -15,6 +15,8 @@
  */
 package us.theparamountgroup.android.inventory;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -22,10 +24,21 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,13 +46,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.theparamountgroup.android.inventory.R;
+
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import us.theparamountgroup.android.inventory.data.ShellContract;
 
@@ -50,25 +72,45 @@ public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String LOG_TAG = EditorActivity.class.getSimpleName();
+    /**
+     * constants for image requests
+     */
 
-    /** Identifier for the shell data loader */
+    private static final int PICK_IMAGE_REQUEST = 0;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+
+
+    // private static final String CAMERA_DIR = "/dcim/";
+    private static final int MY_PERMISSIONS_REQUEST = 2;
+    /**
+     * Identifier for the shell data loader
+     */
     private static final int EXISTING_SHELL_LOADER = 0;
-
-    /** Content URI for the existing shell (null if it's a new shell) */
+    String mCurrentPhotoPath;
+    /**
+     * Content URI for the existing shell (null if it's a new shell)
+     */
     private Uri mCurrentShellUri;
 
-    /** EditText field to enter the shell's name */
+    /**
+     * EditText field to enter the shell's name
+     */
     private EditText mNameEditText;
 
-    /** EditText field to enter the shell's color */
+    /**
+     * EditText field to enter the shell's color
+     */
     private EditText mColorEditText;
 
 
-
-    /** EditText field to enter if the shell has a hole  */
+    /**
+     * EditText field to enter if the shell has a hole
+     */
     private Spinner mHoleSpinner;
 
-    /** EditText field to enter the type shell */
+    /**
+     * EditText field to enter the type shell
+     */
     private Spinner mTypeSpinner;
 
     /**
@@ -86,8 +128,17 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private int mType = ShellContract.ShellEntry.TYPE_SCALLOP;
 
-    /** Boolean flag that keeps track of whether the shell has been edited (true) or not (false) */
+    /**
+     * Boolean flag that keeps track of whether the shell has been edited (true) or not (false)
+     */
     private boolean mShellHasChanged = false;
+
+
+    private ImageView mImageView;
+    private Button mButtonTakePicture;
+    private Uri mUri;
+    private Bitmap mBitmap;
+    private boolean isGalleryPicture = false;
 
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
@@ -100,6 +151,7 @@ public class EditorActivity extends AppCompatActivity implements
             return false;
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,10 +193,25 @@ public class EditorActivity extends AppCompatActivity implements
         // or not, if the user tries to leave the editor without saving.
         mNameEditText.setOnTouchListener(mTouchListener);
         mColorEditText.setOnTouchListener(mTouchListener);
-
         mHoleSpinner.setOnTouchListener(mTouchListener);
         mTypeSpinner.setOnTouchListener(mTouchListener);
 
+/*      The view tree observer can be used to get notifications when global events, like layout, happen.
+*       The returned ViewTreeObserver observer is not guaranteed to remain valid for the lifetime of this View.
+*/
+        mImageView = (ImageView) findViewById(R.id.image);
+        ViewTreeObserver viewTreeObserver = mImageView.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                mImageView.setImageBitmap(getBitmapFromUri(mUri));
+            }
+        });
+        mButtonTakePicture = (Button) findViewById(R.id.take_photo);
+        mButtonTakePicture.setEnabled(false);
+
+        requestPermissions();
         setupHoleSpinner();
         setupTypeSpinner();
     }
@@ -218,7 +285,7 @@ public class EditorActivity extends AppCompatActivity implements
                     } else {
 
                         mType = ShellContract.ShellEntry.TYPE_SHARD;
-                        Log.i(LOG_TAG," In type spinner and assigned mType to shard: " + mType);
+                        Log.i(LOG_TAG, " In type spinner and assigned mType to shard: " + mType);
                     }
                 }
             }
@@ -230,14 +297,17 @@ public class EditorActivity extends AppCompatActivity implements
             }
         });
     }
+
     /**
      * Get user input from editor and save pet into database.
      */
     private void saveShell() {
+        Log.i(LOG_TAG, " in saveShell: ");
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
         String colorString = mColorEditText.getText().toString().trim();
+        String photoString;
 
 
         // Check if this is supposed to be a new shell
@@ -248,7 +318,14 @@ public class EditorActivity extends AppCompatActivity implements
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
         }
-
+        if (mUri != null) {
+            Log.i(LOG_TAG, " Lets see what mUri has for us: " + mUri);
+            photoString = mUri.toString();
+            Log.i(LOG_TAG, " Lets see what photoString has for us: " + photoString);
+        } else {
+            photoString = "";
+        }
+        Log.i(LOG_TAG, " Lets see what photoString has for us after if: " + photoString);
         // Create a ContentValues object where column names are the keys,
         // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
@@ -256,6 +333,8 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_COLOR, colorString);
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_HOLE, mHole);
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_TYPE, mType);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_PHOTO, photoString);
+
 
         // Determine if this is a new or existing shell by checking if mCurrentShellUri is null or not
         if (mCurrentShellUri == null) {
@@ -563,4 +642,171 @@ public class EditorActivity extends AppCompatActivity implements
         // Close the activity
         finish();
     }
+
+
+    /*********************** New Stuff *******************/
+
+
+    public void requestPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST);
+            }
+        } else {
+            mButtonTakePicture.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    mButtonTakePicture.setEnabled(true);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+    }
+
+    public void takePicture(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Log.i(LOG_TAG, "in takePicture");
+        try {
+            File file = createImageFile();
+            Log.i(LOG_TAG, "in takePicture just back from createImagefile");
+
+            mUri = FileProvider.getUriForFile(getApplication().getApplicationContext(),
+                    "us.theparamountgroup.android.inventory.fileprovider", file);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                    mUri);
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void openImageSelector(View view) {
+        Intent intent;
+        Log.e(LOG_TAG, "While is set and the ifs are worked through.");
+
+        if (Build.VERSION.SDK_INT < 19) {
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+        } else {
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+        }
+
+        Log.e(LOG_TAG, "Check write to external permissions");
+
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    private File createImageFile() throws IOException {
+        Log.i(LOG_TAG, "in createImageFile");
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM), "Camera");
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        Log.i(LOG_TAG, "in createImageFile mCurrentPhotoPath: " + mCurrentPhotoPath);
+        return image;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        Log.i(LOG_TAG, "Received an \"Activity Result\"");
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
+            if (resultData != null) {
+                mUri = resultData.getData();
+                Log.i(LOG_TAG, "Uri: " + mUri.toString());
+                mBitmap = getBitmapFromUri(mUri);
+                mImageView.setImageBitmap(mBitmap);
+                mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+                isGalleryPicture = true;
+            }
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            Log.i(LOG_TAG, "Uri: " + mUri.toString());
+
+            mBitmap = getBitmapFromUri(mUri);
+            mImageView.setImageBitmap(mBitmap);
+            mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            isGalleryPicture = false;
+        }
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) {
+        if (uri == null) {
+            return null;
+        }
+        int targetW = mImageView.getWidth();
+        int targetH = mImageView.getHeight();
+        ParcelFileDescriptor parcelFileDescriptor = null;
+        try {
+            parcelFileDescriptor =
+                    getContentResolver().openFileDescriptor(uri, "r");
+            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            opts.inJustDecodeBounds = true;
+            BitmapFactory.decodeFileDescriptor(fileDescriptor, null, opts);
+            int photoW = opts.outWidth;
+            int photoH = opts.outHeight;
+
+            int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+            opts.inJustDecodeBounds = false;
+            opts.inSampleSize = scaleFactor;
+            opts.inPurgeable = true;
+            Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor, null, opts);
+
+            if (image.getWidth() > image.getHeight()) {
+                Matrix mat = new Matrix();
+                int degree = 90;
+                mat.postRotate(degree);
+                Bitmap imageRotate = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), mat, true);
+                return imageRotate;
+            } else {
+                return image;
+            }
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Failed to load image.", e);
+            return null;
+        } finally {
+            try {
+                if (parcelFileDescriptor != null) {
+                    parcelFileDescriptor.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e(LOG_TAG, "Error closing ParcelFile Descriptor");
+            }
+        }
+    }
+
+
 }

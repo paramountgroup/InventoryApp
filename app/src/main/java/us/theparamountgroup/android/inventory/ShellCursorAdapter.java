@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.theparamountgroup.android.inventory.R;
@@ -61,8 +62,8 @@ public class ShellCursorAdapter extends CursorAdapter {
     }
 
     /**
-     * This method binds the pet data (in the current row pointed to by cursor) to the given
-     * list item layout. For example, the name for the current pet can be set on the name TextView
+     * This method binds the shell data (in the current row pointed to by cursor) to the given
+     * list item layout. For example, the name for the current shell can be set on the name TextView
      * in the list item layout.
      *
      * @param view    Existing view, returned earlier by newView() method
@@ -74,24 +75,27 @@ public class ShellCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
-        TextView summaryTextView = (TextView) view.findViewById(R.id.summary);
-
+        TextView colorTextView = (TextView) view.findViewById(R.id.summary);
+        ImageView photoImageView = (ImageView) view.findViewById(R.id.image);
         // Find the columns of pet attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_NAME);
-        int breedColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_COLOR);
+        int colorColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_COLOR);
+        int photoColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_PHOTO);
 
         // Read the pet attributes from the Cursor for the current pet
-        String petName = cursor.getString(nameColumnIndex);
-        String petBreed = cursor.getString(breedColumnIndex);
+        String shellName = cursor.getString(nameColumnIndex);
+        String shellColor = cursor.getString(colorColumnIndex);
+        String shellPhoto = cursor.getString(photoColumnIndex);
 
         // If the pet breed is empty string or null, then use some default text
         // that says "Unknown breed", so the TextView isn't blank.
-        if (TextUtils.isEmpty(petBreed)) {
-            petBreed = context.getString(R.string.unknown_color);
+        if (TextUtils.isEmpty(shellColor)) {
+            shellColor = context.getString(R.string.unknown_color);
         }
 
-        // Update the TextViews with the attributes for the current pet
-        nameTextView.setText(petName);
-        summaryTextView.setText(petBreed);
+        // Update the TextViews with the attributes for the current shell
+        nameTextView.setText(shellName);
+        colorTextView.setText(shellColor);
+        //photoImageView.setImage(shellPhoto);
     }
 }

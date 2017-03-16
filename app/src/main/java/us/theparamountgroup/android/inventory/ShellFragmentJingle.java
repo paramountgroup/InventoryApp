@@ -47,8 +47,6 @@ public class ShellFragmentJingle extends Fragment implements LoaderManager.Loade
         // Inflate the layout for this fragment
 
 
-
-
         // Setup FAB to open EditorActivity
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab2);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +56,6 @@ public class ShellFragmentJingle extends Fragment implements LoaderManager.Loade
                 startActivity(intent);
             }
         });
-
 
 
         // Find the ListView which will be populated with the pet data
@@ -112,8 +109,8 @@ public class ShellFragmentJingle extends Fragment implements LoaderManager.Loade
         String[] projection = {
                 ShellContract.ShellEntry._ID,
                 ShellContract.ShellEntry.COLUMN_SHELL_NAME,
-                ShellContract.ShellEntry.COLUMN_SHELL_COLOR};
-
+                ShellContract.ShellEntry.COLUMN_SHELL_COLOR,
+                ShellContract.ShellEntry.COLUMN_SHELL_PHOTO};
         String[] jingleArgument = {
                 "1"
         };
@@ -140,8 +137,6 @@ public class ShellFragmentJingle extends Fragment implements LoaderManager.Loade
         // Callback called when the data needs to be deleted
         mCursorAdapter.swapCursor(null);
     }
-
-
 
 
 }
