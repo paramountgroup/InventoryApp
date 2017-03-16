@@ -113,17 +113,11 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:layout_weight="1"
-            android:orientation="vertical">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 
             <Button
                 android:id="@+id/select_photo"
@@ -137,19 +131,23 @@
                 android:id="@+id/take_photo"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
+                android:layout_gravity="right"
+                android:layout_toRightOf="@+id/select_photo"
+                android:layout_toEndOf="@+id/select_photo"
                 android:onClick="takePicture"
                 android:text="Take photo" />
 
-        </LinearLayout>
+
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
+            android:layout_below="@id/select_photo"
             android:scaleType="centerCrop" />
-    </LinearLayout>
+</RelativeLayout>
 
 </LinearLayout>
