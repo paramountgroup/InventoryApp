@@ -17,6 +17,8 @@ package us.theparamountgroup.android.inventory;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +36,7 @@ import us.theparamountgroup.android.inventory.data.ShellContract;
  * that uses a {@link Cursor} of pet data as its data source. This adapter knows
  * how to create list items for each row of pet data in the {@link Cursor}.
  */
-public class ShellCursorAdapter extends CursorAdapter {
+public class ShellCursorAdapter extends CursorAdapter{
 
     /**
      * Constructs a new {@link ShellCursorAdapter}.
@@ -55,6 +57,10 @@ public class ShellCursorAdapter extends CursorAdapter {
      * @param parent  The parent to which the new view is attached to
      * @return the newly created list item view.
      */
+
+    private Uri mUri;
+    private Bitmap mBitmap;
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         // Inflate a list item view using the layout specified in list_item.xml
@@ -85,10 +91,11 @@ public class ShellCursorAdapter extends CursorAdapter {
         // Read the pet attributes from the Cursor for the current pet
         String shellName = cursor.getString(nameColumnIndex);
         String shellColor = cursor.getString(colorColumnIndex);
-        String shellPhoto = cursor.getString(photoColumnIndex);
+        String photo = cursor.getString(colorColumnIndex);
 
-        // If the pet breed is empty string or null, then use some default text
-        // that says "Unknown breed", so the TextView isn't blank.
+
+        // If the shell color is empty string or null, then use some default text
+        // that says "Unknown color", so the TextView isn't blank.
         if (TextUtils.isEmpty(shellColor)) {
             shellColor = context.getString(R.string.unknown_color);
         }
@@ -96,6 +103,15 @@ public class ShellCursorAdapter extends CursorAdapter {
         // Update the TextViews with the attributes for the current shell
         nameTextView.setText(shellName);
         colorTextView.setText(shellColor);
-        //photoImageView.setImage(shellPhoto);
+/*
+        if (!photo.isEmpty()) {
+
+            mUri = Uri.parse(photo);
+            Bitmap  mBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mUri);
+            photoImageView.setImageBitmap(mBitmap);
+        }
+*/
     }
+
+
 }

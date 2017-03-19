@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -72,74 +73,61 @@ public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String LOG_TAG = EditorActivity.class.getSimpleName();
-    /**
-     * constants for image requests
-     */
-
     private static final int PICK_IMAGE_REQUEST = 0;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-
-
     // private static final String CAMERA_DIR = "/dcim/";
     private static final int MY_PERMISSIONS_REQUEST = 2;
     /**
      * Identifier for the shell data loader
      */
     private static final int EXISTING_SHELL_LOADER = 0;
+    /**
+     * constants for image requests
+     */
+// a static variable to get a reference of our application context
+    public static Context contextOfApplication;
     String mCurrentPhotoPath;
     /**
      * Content URI for the existing shell (null if it's a new shell)
      */
     private Uri mCurrentShellUri;
-
     /**
      * EditText field to enter the shell's name
      */
     private EditText mNameEditText;
-
     /**
      * EditText field to enter the shell's color
      */
     private EditText mColorEditText;
-
-
     /**
      * EditText field to enter if the shell has a hole
      */
     private Spinner mHoleSpinner;
-
     /**
      * EditText field to enter the type shell
      */
     private Spinner mTypeSpinner;
-
     /**
      * If the shell has hole. The possible valid values are in the ShellContract.java file:
      * {@link ShellContract.ShellEntry#HOLE_UNKNOWN}, {@link ShellContract.ShellEntry#HOLE}, or
      * {@link ShellContract.ShellEntry#NO_HOLE}.
      */
     private int mHole = ShellContract.ShellEntry.HOLE_UNKNOWN;
-
-
     /**
      * Type of Shell. The possible valid values are in the ShellContract.java file:
      * {@link ShellContract.ShellEntry#TYPE_SCALLOP}, {@link ShellContract.ShellEntry#TYPE_JINGLE},
      * {@link ShellContract.ShellEntry#TYPE_SLIPPER},{@link ShellContract.ShellEntry#TYPE_SHARD}.
      */
     private int mType = ShellContract.ShellEntry.TYPE_SCALLOP;
-
     /**
      * Boolean flag that keeps track of whether the shell has been edited (true) or not (false)
      */
     private boolean mShellHasChanged = false;
-
-
     private ImageView mImageView;
     private Button mButtonTakePicture;
     private Uri mUri;
     private Bitmap mBitmap;
     private boolean isGalleryPicture = false;
-
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
      * the view, and we change the mShellHasChanged boolean to true.
@@ -152,10 +140,15 @@ public class EditorActivity extends AppCompatActivity implements
         }
     };
 
+    public static Context getContextOfApplication() {
+        return contextOfApplication;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        contextOfApplication = getApplicationContext();
         setContentView(R.layout.activity_editor);
 
         // Examine the intent that was used to launch this activity,
@@ -204,6 +197,7 @@ public class EditorActivity extends AppCompatActivity implements
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                mImageView.setImageResource(R.mipmap.ic_launcher);
                 mImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 mImageView.setImageBitmap(getBitmapFromUri(mUri));
             }
@@ -474,7 +468,8 @@ public class EditorActivity extends AppCompatActivity implements
                 ShellContract.ShellEntry.COLUMN_SHELL_NAME,
                 ShellContract.ShellEntry.COLUMN_SHELL_COLOR,
                 ShellContract.ShellEntry.COLUMN_SHELL_HOLE,
-                ShellContract.ShellEntry.COLUMN_SHELL_TYPE};
+                ShellContract.ShellEntry.COLUMN_SHELL_TYPE,
+                ShellContract.ShellEntry.COLUMN_SHELL_PHOTO};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -500,16 +495,24 @@ public class EditorActivity extends AppCompatActivity implements
             int breedColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_COLOR);
             int genderColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_HOLE);
             int typeColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_TYPE);
+            int photoColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_PHOTO);
 
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
             String color = cursor.getString(breedColumnIndex);
             int hole = cursor.getInt(genderColumnIndex);
             int type = cursor.getInt(typeColumnIndex);
+            String photo = cursor.getString(photoColumnIndex);
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
             mColorEditText.setText(color);
+
+            if (!photo.isEmpty()) {
+                mUri = Uri.parse(photo);
+                mBitmap = getBitmapFromUri(mUri);
+                mImageView.setImageBitmap(mBitmap);
+            }
 
 
             // Hole is a dropdown spinner, so map the constant value from the database

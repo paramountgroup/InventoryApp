@@ -17,7 +17,7 @@ import android.widget.ListView;
 
 import com.theparamountgroup.android.inventory.R;
 
-import us.theparamountgroup.android.inventory.data.ShellContract;
+import us.theparamountgroup.android.inventory.data.ShellContract.ShellEntry;
 
 
 public class ShellFragmentScallops extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -80,17 +80,17 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
                 // Create new intent to go to {@link EditorActivity}
                 Intent intent = new Intent(getActivity(), EditorActivity.class);
 
-                // Form the content URI that represents the specific pet that was clicked on,
+                // Form the content URI that represents the specific shell that was clicked on,
                 // by appending the "id" (passed as input to this method) onto the
                 // {@link ShellEntry#CONTENT_URI}.
                 // For example, the URI would be "content://com.example.android.pets/pets/2"
                 // if the pet with ID 2 was clicked on.
-                Uri currentPetUri = ContentUris.withAppendedId(ShellContract.ShellEntry.CONTENT_URI, id);
+                Uri currentPetUri = ContentUris.withAppendedId(ShellEntry.CONTENT_URI, id);
 
                 // Set the URI on the data field of the intent
                 intent.setData(currentPetUri);
 
-                // Launch the {@link EditorActivity} to display the data for the current pet.
+                // Launch the {@link EditorActivity} to display the data for the current shell.
                 startActivity(intent);
             }
         });
@@ -109,11 +109,11 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
 
         // Define a projection that specifies the columns from the table we care about.
         String[] projection = {
-                ShellContract.ShellEntry._ID,
-                ShellContract.ShellEntry.COLUMN_SHELL_NAME,
-                ShellContract.ShellEntry.COLUMN_SHELL_COLOR,
-                ShellContract.ShellEntry.COLUMN_SHELL_HOLE,
-                ShellContract.ShellEntry.COLUMN_SHELL_PHOTO};
+                ShellEntry._ID,
+                ShellEntry.COLUMN_SHELL_NAME,
+                ShellEntry.COLUMN_SHELL_COLOR,
+                ShellEntry.COLUMN_SHELL_HOLE,
+                ShellEntry.COLUMN_SHELL_PHOTO};
 
 
         String[] scallopArgument = {
@@ -122,9 +122,9 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new android.support.v4.content.CursorLoader(getContext(),   // Parent activity context
-                ShellContract.ShellEntry.CONTENT_URI,   // Provider content URI to query
+                ShellEntry.CONTENT_URI,   // Provider content URI to query
                 projection,             // Columns to include in the resulting Cursor
-                ShellContract.ShellEntry.COLUMN_SHELL_TYPE + "=?",               //     No selection clause
+                ShellEntry.COLUMN_SHELL_TYPE + "=?",               //     No selection clause
                 scallopArgument,                     // No selection arguments
                 null);                  // Default sort order
     }
@@ -135,6 +135,34 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
 
         // Update {@link ShellCursorAdapter} with this new cursor containing updated shell data
         mCursorAdapter.swapCursor(data);
+/*
+        if (data.moveToFirst()) {
+            int nameColumnIndex = data.getColumnIndex(ShellEntry.COLUMN_SHELL_NAME);
+            int colorColumnIndex = data.getColumnIndex(ShellEntry.COLUMN_SHELL_COLOR);
+            int quantityColumnIndex = data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
+            int priceColumnIndex = data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
+            int photoColumnIndex = data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PHOTO);
+
+            String name = data.getString(nameColumnIndex);
+            String color = data.getString(colorColumnIndex);
+            int quantity = data.getInt(quantityColumnIndex);
+            double price = data.getDouble(priceColumnIndex);
+            String photo = data.getString(photoColumnIndex);
+
+            mNameEditText.setText(name);
+            mSalesTextView.setText(color);
+            mQuantityTextView.setText(Integer.toString(quantity));
+            mPriceEditText.setText(Double.toString(price));
+
+            if (!photo.isEmpty()) {
+                mUri = Uri.parse(photo);
+                mBitmap = getBitmapFromUri(mUri);
+                mImageView.setImageBitmap(mBitmap);
+            }
+            hideSoftKeyboard();
+        }
+
+        */
     }
 
     @Override
