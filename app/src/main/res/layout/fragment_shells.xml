@@ -68,8 +68,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add_pet"/>
-
+        android:src="@mipmap/ic_launcher"/>
+<!--
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
         style="@style/CategoryTab"
@@ -81,4 +81,7 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+        -->
+
 </RelativeLayout>

@@ -27,4 +27,7 @@
     <color name="editorColorPrimaryDark">#394450</color>
     <!-- Background color for app -->
     <color name="blue_background">#90CAF9</color>
+
+    <!-- Text color for the details of the earthquake in the list item -->
+    <color name="textColorHeadings">#B4BAC0</color>
 </resources>

@@ -29,7 +29,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -197,9 +196,10 @@ public class EditorActivity extends AppCompatActivity implements
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                mImageView.setImageResource(R.mipmap.ic_launcher);
+                Log.i(LOG_TAG, " in onGlobalLayout trying to get image to appear");
+                mImageView.setImageResource(R.drawable.ic_empty_shelter);
                 mImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                mImageView.setImageBitmap(getBitmapFromUri(mUri));
+               // mImageView.setImageBitmap(getBitmapFromUri(mUri));
             }
         });
         mButtonTakePicture = (Button) findViewById(R.id.take_photo);
@@ -786,7 +786,8 @@ public class EditorActivity extends AppCompatActivity implements
             opts.inSampleSize = scaleFactor;
             opts.inPurgeable = true;
             Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor, null, opts);
-
+            return image;
+/*
             if (image.getWidth() > image.getHeight()) {
                 Matrix mat = new Matrix();
                 int degree = 90;
@@ -796,6 +797,8 @@ public class EditorActivity extends AppCompatActivity implements
             } else {
                 return image;
             }
+
+           */
         } catch (Exception e) {
             Log.e(LOG_TAG, "Failed to load image.", e);
             return null;

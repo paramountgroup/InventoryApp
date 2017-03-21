@@ -125,4 +125,5 @@
     <string name="jingle">Jingle</string>
     <string name="slipper">Slipper</string>
     <string name="shard">Shard</string>
+    <string name="name">Name assigned to shell</string>
 </resources>
