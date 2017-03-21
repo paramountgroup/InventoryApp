@@ -313,7 +313,7 @@ public class EditorActivity extends AppCompatActivity implements
             return;
         }
         if (mUri != null) {
-            Log.i(LOG_TAG, " Lets see what mUri has for us: " + mUri);
+            Log.i(LOG_TAG, "in Save shell Lets see what mUri has for us: " + mUri);
             photoString = mUri.toString();
             Log.i(LOG_TAG, " Lets see what photoString has for us: " + photoString);
         } else {
