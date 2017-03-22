@@ -18,8 +18,6 @@ package us.theparamountgroup.android.inventory;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,11 +29,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.theparamountgroup.android.inventory.R;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import us.theparamountgroup.android.inventory.data.ShellContract;
 
@@ -104,6 +97,7 @@ public class ShellCursorAdapter extends CursorAdapter {
         Log.i(LOG_TAG, " Lets find the stored string for the shellColor: " + shellColor);
         String photo = cursor.getString(photoColumnIndex);
         Log.i(LOG_TAG, " Lets find the stored URL for the photo: " + photo);
+        /*
         try (InputStream is = new URL(photo).openStream()) {
             Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeStream(is), THUMBNAIL_SIZE, THUMBNAIL_SIZE);
             photoImageView.setImageBitmap(thumbImage);
@@ -114,7 +108,7 @@ public class ShellCursorAdapter extends CursorAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+*/
         // If the shell color is empty string or null, then use some default text
         // that says "Unknown color", so the TextView isn't blank.
         if (TextUtils.isEmpty(shellColor)) {

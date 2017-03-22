@@ -110,6 +110,8 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
                 ShellContract.ShellEntry._ID,
                 ShellContract.ShellEntry.COLUMN_SHELL_NAME,
                 ShellContract.ShellEntry.COLUMN_SHELL_COLOR,
+                ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY,
+                ShellContract.ShellEntry.COLUMN_SHELL_PRICE,
                 ShellContract.ShellEntry.COLUMN_SHELL_PHOTO};
 
         String[] slipperArgument = {

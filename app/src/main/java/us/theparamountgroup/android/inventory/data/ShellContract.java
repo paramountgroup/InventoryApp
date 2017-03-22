@@ -133,7 +133,8 @@ public final class ShellContract {
         public static final int TYPE_SHARD = 3;
 
 
-
+        public static final String COLUMN_SHELL_QUANTITY = "quantity";
+        public static final String COLUMN_SHELL_PRICE = "price";
 
 
         /**

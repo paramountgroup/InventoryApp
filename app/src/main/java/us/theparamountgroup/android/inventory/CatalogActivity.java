@@ -89,6 +89,8 @@ public class CatalogActivity extends AppCompatActivity {
         values.put(ShellEntry.COLUMN_SHELL_HOLE, ShellContract.ShellEntry.HOLE);
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_TYPE, ShellContract.ShellEntry.TYPE_JINGLE);
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_PHOTO, NO_PHOTO);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_PRICE, 7.14);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY, 14);
 
         // Insert a new row for "Inserted Shell" into the provider using the ContentResolver.
         // Use the {@link ShellEntry#CONTENT_URI} to indicate that we want to insert

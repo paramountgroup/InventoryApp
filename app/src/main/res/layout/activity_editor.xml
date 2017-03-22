@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
@@ -9,10 +8,8 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
-<!-- Layout for the editor -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+--><!-- Layout for the editor -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -27,128 +24,247 @@
         android:orientation="horizontal">
 
         <!-- Label -->
+        <!-- Name field -->
         <TextView
-            android:text="@string/category_overview"
-            style="@style/CategoryStyle" />
+            style="@style/CategoryStyle"
+            android:text="Name" />
 
         <!-- Input fields -->
-        <LinearLayout
-            android:layout_height="wrap_content"
+
+
+
+        <EditText
+            android:id="@+id/edit_shell_name"
+            style="@style/EditorFieldStyle"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_shell_name"
             android:layout_weight="2"
+            android:inputType="textCapWords" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="Color"
+          />
+        <!-- Color field -->
+        <EditText
+            android:id="@+id/edit_shell_color"
+            style="@style/EditorFieldStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:hint="@string/hint_shell_color"
+            android:inputType="textCapWords" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Hole category -->
+        <LinearLayout
+            android:id="@+id/container_hole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <!-- Label -->
+            <TextView
+                style="@style/CategoryStyle"
+                android:text="@string/category_hole" />
+
+            <!-- Input field -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <!-- Gender drop-down spinner -->
+                <Spinner
+                    android:id="@+id/spinner_hole"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:paddingRight="16dp"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Type category -->
+        <LinearLayout
+            android:id="@+id/container_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <!-- Label -->
+            <TextView
+                style="@style/CategoryStyle"
+                android:text="@string/category_type" />
+
+            <!-- Input field -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <!-- Gender drop-down spinner -->
+                <Spinner
+                    android:id="@+id/spinner_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:paddingRight="16dp"
+                    android:spinnerMode="dropdown" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+
+            style="@style/CategoryStyle"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Quantity"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/colorAccent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/plus"
+                    android:layout_width="32dp"
+                    android:layout_height="37dp"
+                    android:onClick="addQuantity"
+                    android:text="+"
+                    android:textAppearance="?android:textAppearanceSmall" />
+
+                <Button
+                    android:id="@+id/minus"
+                    android:layout_width="32dp"
+                    android:layout_height="37dp"
+                    android:onClick="subtractQuantity"
+                    android:text="-"
+                    android:textAppearance="?android:textAppearanceSmall" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/edit_product_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:fontFamily="sans-serif-light"
+            android:hint="Quantity"
             android:paddingLeft="4dp"
-            android:orientation="vertical">
-
-            <!-- Name field -->
-            <EditText
-                android:id="@+id/edit_shell_name"
-                android:hint="@string/hint_shell_name"
-                android:inputType="textCapWords"
-                style="@style/EditorFieldStyle" />
-
-            <!-- Breed field -->
-            <EditText
-                android:id="@+id/edit_shell_color"
-                android:hint="@string/hint_shell_color"
-                android:inputType="textCapWords"
-                style="@style/EditorFieldStyle" />
-        </LinearLayout>
+            android:textAppearance="?android:textAppearanceMedium" />
     </LinearLayout>
 
-    <!-- Gender category -->
     <LinearLayout
-        android:id="@+id/container_gender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <!-- Label -->
         <TextView
-            android:text="@string/category_hole"
-            style="@style/CategoryStyle" />
-
-        <!-- Input field -->
-        <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:layout_weight="2"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="Price"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/colorAccent" />
 
-            <!-- Gender drop-down spinner -->
-            <Spinner
-                android:id="@+id/spinner_hole"
-                android:layout_height="48dp"
-                android:layout_width="wrap_content"
-                android:paddingRight="16dp"
-                android:spinnerMode="dropdown"/>
-        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:paddingLeft="4dp">
+
+            <EditText
+                android:id="@+id/edit_product_price"
+                style="@style/EditorFieldStyle"
+                android:hint="Price"
+                android:inputType="numberDecimal"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:id="@+id/label_weight_units"
+                style="@style/EditorUnitsStyle"
+                android:text="Dollars" />
+        </RelativeLayout>
     </LinearLayout>
 
-    <!-- Gender category -->
-    <LinearLayout
-        android:id="@+id/container_type"
+    <Button
+        android:id="@+id/order"
+        android:layout_width="140dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:onClick="orderProduct"
+        android:text="Order" />
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <!-- Label -->
-        <TextView
-            android:text="@string/category_type"
-            style="@style/CategoryStyle" />
 
-        <!-- Input field -->
-        <LinearLayout
+        <Button
+            android:id="@+id/select_photo"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:orientation="vertical">
+            android:layout_gravity="left"
+            android:onClick="openImageSelector"
+            android:text="Select photo" />
 
-            <!-- Gender drop-down spinner -->
-            <Spinner
-                android:id="@+id/spinner_type"
-                android:layout_height="48dp"
-                android:layout_width="wrap_content"
-                android:paddingRight="16dp"
-                android:spinnerMode="dropdown"/>
-        </LinearLayout>
-    </LinearLayout>
-
-
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-            <Button
-                android:id="@+id/select_photo"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:onClick="openImageSelector"
-                android:text="Select photo" />
-
-            <Button
-                android:id="@+id/take_photo"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_toRightOf="@+id/select_photo"
-                android:layout_toEndOf="@+id/select_photo"
-                android:onClick="takePicture"
-                android:text="Take photo" />
-
+        <Button
+            android:id="@+id/take_photo"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_toEndOf="@+id/select_photo"
+            android:layout_toRightOf="@+id/select_photo"
+            android:onClick="takePicture"
+            android:text="Take photo" />
 
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:layout_weight="1"
             android:layout_below="@id/select_photo"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
             android:scaleType="centerCrop" />
-</RelativeLayout>
+    </RelativeLayout>
 
 </LinearLayout>

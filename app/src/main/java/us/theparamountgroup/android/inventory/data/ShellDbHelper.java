@@ -26,7 +26,9 @@ public class ShellDbHelper extends SQLiteOpenHelper {
 
     public static final String LOG_TAG = ShellDbHelper.class.getSimpleName();
 
-    /** Name of the database file */
+    /**
+     * Name of the database file
+     */
     private static final String DATABASE_NAME = "soulshells.db";
 
     /**
@@ -49,9 +51,11 @@ public class ShellDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create a String that contains the SQL statement to create the pets table
-        String SQL_CREATE_PETS_TABLE =  "CREATE TABLE " + ShellContract.ShellEntry.TABLE_NAME + " ("
+        String SQL_CREATE_PETS_TABLE = "CREATE TABLE " + ShellContract.ShellEntry.TABLE_NAME + " ("
                 + ShellContract.ShellEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ShellContract.ShellEntry.COLUMN_SHELL_NAME + " TEXT NOT NULL, "
+                + ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY + " INTEGER NOT NULL, "
+                + ShellContract.ShellEntry.COLUMN_SHELL_PRICE + " FLOAT NOT NULL DEFAULT 0, "
                 + ShellContract.ShellEntry.COLUMN_SHELL_COLOR + " TEXT, "
                 + ShellContract.ShellEntry.COLUMN_SHELL_HOLE + " INTEGER NOT NULL, "
                 + ShellContract.ShellEntry.COLUMN_SHELL_TYPE + " INTEGER NOT NULL,"

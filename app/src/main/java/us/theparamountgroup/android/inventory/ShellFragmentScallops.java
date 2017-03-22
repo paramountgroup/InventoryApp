@@ -113,6 +113,8 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
                 ShellEntry.COLUMN_SHELL_NAME,
                 ShellEntry.COLUMN_SHELL_COLOR,
                 ShellEntry.COLUMN_SHELL_HOLE,
+                ShellEntry.COLUMN_SHELL_QUANTITY,
+                ShellEntry.COLUMN_SHELL_PRICE,
                 ShellEntry.COLUMN_SHELL_PHOTO};
 
 
@@ -139,8 +141,8 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
         if (data.moveToFirst()) {
             int nameColumnIndex = data.getColumnIndex(ShellEntry.COLUMN_SHELL_NAME);
             int colorColumnIndex = data.getColumnIndex(ShellEntry.COLUMN_SHELL_COLOR);
-            int quantityColumnIndex = data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
-            int priceColumnIndex = data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
+            int quantityColumnIndex = data.getColumnIndex(ProductEntry.COLUMN_SHELL_QUANTITY);
+            int priceColumnIndex = data.getColumnIndex(ProductEntry.COLUMN_SHELL_PRICE);
             int photoColumnIndex = data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PHOTO);
 
             String name = data.getString(nameColumnIndex);

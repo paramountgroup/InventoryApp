@@ -53,6 +53,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.theparamountgroup.android.inventory.R;
@@ -127,6 +128,8 @@ public class EditorActivity extends AppCompatActivity implements
     private Uri mUri;
     private Bitmap mBitmap;
     private boolean isGalleryPicture = false;
+    private TextView mQuantityTextView;
+    private EditText mPriceEditText;
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
      * the view, and we change the mShellHasChanged boolean to true.
@@ -180,6 +183,9 @@ public class EditorActivity extends AppCompatActivity implements
         mHoleSpinner = (Spinner) findViewById(R.id.spinner_hole);
         mTypeSpinner = (Spinner) findViewById(R.id.spinner_type);
 
+        mQuantityTextView = (TextView) findViewById(R.id.edit_product_quantity);
+        mPriceEditText = (EditText) findViewById(R.id.edit_product_price);
+
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
         // or not, if the user tries to leave the editor without saving.
@@ -187,6 +193,8 @@ public class EditorActivity extends AppCompatActivity implements
         mColorEditText.setOnTouchListener(mTouchListener);
         mHoleSpinner.setOnTouchListener(mTouchListener);
         mTypeSpinner.setOnTouchListener(mTouchListener);
+        mQuantityTextView.setOnTouchListener(mTouchListener);
+        mPriceEditText.setOnTouchListener(mTouchListener);
 
 /*      The view tree observer can be used to get notifications when global events, like layout, happen.
 *       The returned ViewTreeObserver observer is not guaranteed to remain valid for the lifetime of this View.
@@ -301,6 +309,8 @@ public class EditorActivity extends AppCompatActivity implements
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
         String colorString = mColorEditText.getText().toString().trim();
+        String quantityString = mQuantityTextView.getText().toString().trim();
+        String priceString = mPriceEditText.getText().toString().trim();
         String photoString;
 
 
@@ -319,6 +329,17 @@ public class EditorActivity extends AppCompatActivity implements
         } else {
             photoString = "";
         }
+
+        int quantity = 0;
+        if (!TextUtils.isEmpty(quantityString)) {
+            quantity = Integer.parseInt(quantityString);
+        }
+
+        double price = 0.0;
+        if (!TextUtils.isEmpty(priceString)) {
+            price = Double.parseDouble(priceString);
+        }
+
         Log.i(LOG_TAG, " Lets see what photoString has for us after if: " + photoString);
         // Create a ContentValues object where column names are the keys,
         // and pet attributes from the editor are the values.
@@ -328,6 +349,8 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_HOLE, mHole);
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_TYPE, mType);
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_PHOTO, photoString);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY, quantity);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_PRICE, price);
 
 
         // Determine if this is a new or existing shell by checking if mCurrentShellUri is null or not
@@ -469,6 +492,8 @@ public class EditorActivity extends AppCompatActivity implements
                 ShellContract.ShellEntry.COLUMN_SHELL_COLOR,
                 ShellContract.ShellEntry.COLUMN_SHELL_HOLE,
                 ShellContract.ShellEntry.COLUMN_SHELL_TYPE,
+                ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY,
+                ShellContract.ShellEntry.COLUMN_SHELL_PRICE,
                 ShellContract.ShellEntry.COLUMN_SHELL_PHOTO};
 
         // This loader will execute the ContentProvider's query method on a background thread
@@ -496,6 +521,8 @@ public class EditorActivity extends AppCompatActivity implements
             int genderColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_HOLE);
             int typeColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_TYPE);
             int photoColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_PHOTO);
+            int quantityColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY);
+            int priceColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_PRICE);
 
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
@@ -503,10 +530,14 @@ public class EditorActivity extends AppCompatActivity implements
             int hole = cursor.getInt(genderColumnIndex);
             int type = cursor.getInt(typeColumnIndex);
             String photo = cursor.getString(photoColumnIndex);
+            int quantity = cursor.getInt(quantityColumnIndex);
+            double price = cursor.getDouble(priceColumnIndex);
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
             mColorEditText.setText(color);
+            mQuantityTextView.setText(Integer.toString(quantity));
+            mPriceEditText.setText(Double.toString(price));
 
             if (!photo.isEmpty()) {
                 mUri = Uri.parse(photo);
@@ -559,6 +590,9 @@ public class EditorActivity extends AppCompatActivity implements
 
         mHoleSpinner.setSelection(0); // Select "Unknown" hole
         mTypeSpinner.setSelection(0); // Select "Scallop" to type
+
+        mQuantityTextView.clearComposingText();
+        mPriceEditText.clearComposingText();
     }
 
     /**
@@ -813,6 +847,45 @@ public class EditorActivity extends AppCompatActivity implements
             }
         }
     }
+    public void orderProduct(View view) {
+        String nameProduct = mNameEditText.getText().toString();
 
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_EMAIL, "supplier@example.com");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Order " + nameProduct);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    public void addQuantity(View view) {
+        int quantity;
+        String quantityString = mQuantityTextView.getText().toString();
+        if (quantityString.isEmpty()) {
+            quantity = 0;
+        } else {
+            quantity = Integer.parseInt(quantityString);
+        }
+
+        quantity = quantity + 1;
+        mQuantityTextView.setText(String.valueOf(quantity));
+    }
+
+    public void subtractQuantity(View view) {
+        int quantity;
+        String quantityString = mQuantityTextView.getText().toString();
+        if (quantityString.isEmpty()) {
+            quantity = 0;
+        } else {
+            quantity = Integer.parseInt(quantityString);
+        }
+
+        if (quantity > 0) {
+            quantity = quantity - 1;
+        }
+
+        mQuantityTextView.setText(String.valueOf(quantity));
+    }
 
 }
