@@ -270,7 +270,9 @@
             android:layout_centerVertical="true"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:scaleType="centerCrop" />
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            />
     </RelativeLayout>
 
 </LinearLayout>

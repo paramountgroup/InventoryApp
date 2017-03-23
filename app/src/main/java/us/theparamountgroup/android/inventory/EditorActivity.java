@@ -205,7 +205,7 @@ public class EditorActivity extends AppCompatActivity implements
             @Override
             public void onGlobalLayout() {
                 Log.i(LOG_TAG, " in onGlobalLayout trying to get image to appear");
-                mImageView.setImageResource(R.drawable.ic_empty_shelter);
+                mImageView.setImageResource(R.drawable.ic_soul_shells_logo);
                 mImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                // mImageView.setImageBitmap(getBitmapFromUri(mUri));
             }
