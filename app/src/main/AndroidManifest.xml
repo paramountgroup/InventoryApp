@@ -37,6 +37,8 @@
         <activity
             android:name="us.theparamountgroup.android.inventory.EditorActivity"
             android:theme="@style/EditorTheme"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
             android:parentActivityName="us.theparamountgroup.android.inventory.CatalogActivity" >
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data

@@ -150,7 +150,7 @@ public class EditorActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        contextOfApplication = getApplicationContext();
+       // contextOfApplication = getApplicationContext();
         setContentView(R.layout.activity_editor);
 
         // Examine the intent that was used to launch this activity,
@@ -546,6 +546,8 @@ public class EditorActivity extends AppCompatActivity implements
             }
 
 
+
+
             // Hole is a dropdown spinner, so map the constant value from the database
             // into one of the dropdown options (0 is Unknown, 1 is Hole, 2 is No Hole).
             // Then call setSelection() so that option is displayed on screen as the current selection.
@@ -581,6 +583,8 @@ public class EditorActivity extends AppCompatActivity implements
             }
         }
     }
+
+
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {

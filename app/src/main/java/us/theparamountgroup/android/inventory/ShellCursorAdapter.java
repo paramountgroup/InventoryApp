@@ -18,7 +18,9 @@ package us.theparamountgroup.android.inventory;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +31,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.theparamountgroup.android.inventory.R;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 import us.theparamountgroup.android.inventory.data.ShellContract;
 
@@ -82,6 +87,7 @@ public class ShellCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
         final int THUMBNAIL_SIZE = 64;
+        Uri mUri;
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView colorTextView = (TextView) view.findViewById(R.id.color);
         ImageView photoImageView = (ImageView) view.findViewById(R.id.thumbnail);
@@ -95,11 +101,13 @@ public class ShellCursorAdapter extends CursorAdapter {
         Log.i(LOG_TAG, " Lets find the stored string for the shellName: " + shellName);
         String shellColor = cursor.getString(colorColumnIndex);
         Log.i(LOG_TAG, " Lets find the stored string for the shellColor: " + shellColor);
+
+
         String photo = cursor.getString(photoColumnIndex);
-        Log.i(LOG_TAG, " Lets find the stored URL for the photo: " + photo);
-        /*
-        try (InputStream is = new URL(photo).openStream()) {
-            Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeStream(is), THUMBNAIL_SIZE, THUMBNAIL_SIZE);
+        Uri myUri = Uri.parse(photo);
+
+        try  {
+            Bitmap thumbImage = ThumbnailUtils.extractThumbnail(MediaStore.Images.Media.getBitmap(context.getContentResolver(), myUri), THUMBNAIL_SIZE, THUMBNAIL_SIZE);
             photoImageView.setImageBitmap(thumbImage);
 
         } catch (MalformedURLException e) {
@@ -108,7 +116,7 @@ public class ShellCursorAdapter extends CursorAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-*/
+
         // If the shell color is empty string or null, then use some default text
         // that says "Unknown color", so the TextView isn't blank.
         if (TextUtils.isEmpty(shellColor)) {
@@ -128,6 +136,8 @@ public class ShellCursorAdapter extends CursorAdapter {
         }
 */
     }
+
+
 
 
 }
