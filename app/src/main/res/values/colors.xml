@@ -34,4 +34,8 @@
 
     <!-- Text color for the details of the shells in the list item -->
     <color name="textColorHeadings">#ABA8B2</color>
+
+    <!-- Accent color for UI controls like checkboxes and text fields -->
+    <color name="buttonColor">#F0514B</color>
+
 </resources>

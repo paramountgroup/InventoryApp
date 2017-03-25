@@ -66,4 +66,5 @@
     <style name="CategoryTabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textColor">@color/textColorHeadings</item>
     </style>
+
 </resources>

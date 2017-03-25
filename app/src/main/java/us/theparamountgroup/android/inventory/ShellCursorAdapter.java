@@ -143,7 +143,7 @@ public class ShellCursorAdapter extends CursorAdapter {
         nameTextView.setText(shellName);
         colorTextView.setText(shellColor);
         quantityTextView.setText(shellQuantity);
-        priceTextView.setText(shellPrice);
+        priceTextView.setText("$" + shellPrice);
 
 
     }

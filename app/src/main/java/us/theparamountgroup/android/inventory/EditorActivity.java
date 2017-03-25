@@ -224,14 +224,14 @@ public class EditorActivity extends AppCompatActivity implements
     private void setupHoleSpinner() {
         // Create adapter for spinner. The list options are from the String array it will use
         // the spinner will use the default layout
-        ArrayAdapter genderSpinnerAdapter = ArrayAdapter.createFromResource(this,
+        ArrayAdapter holeSpinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.array_hole_options, android.R.layout.simple_spinner_item);
 
         // Specify dropdown layout style - simple list view with 1 item per line
-        genderSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        holeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         // Apply the adapter to the spinner
-        mHoleSpinner.setAdapter(genderSpinnerAdapter);
+        mHoleSpinner.setAdapter(holeSpinnerAdapter);
 
         // Set the integer mSelected to the constant values
         mHoleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -311,6 +311,10 @@ public class EditorActivity extends AppCompatActivity implements
         String colorString = mColorEditText.getText().toString().trim();
         String quantityString = mQuantityTextView.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
+        // remove the number sign if necessary
+        if (!Character.isDigit(priceString.charAt(0))){
+            priceString = priceString.substring(1);
+        }
         String photoString;
 
 
@@ -825,18 +829,7 @@ public class EditorActivity extends AppCompatActivity implements
             opts.inPurgeable = true;
             Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor, null, opts);
             return image;
-/*
-            if (image.getWidth() > image.getHeight()) {
-                Matrix mat = new Matrix();
-                int degree = 90;
-                mat.postRotate(degree);
-                Bitmap imageRotate = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), mat, true);
-                return imageRotate;
-            } else {
-                return image;
-            }
 
-           */
         } catch (Exception e) {
             Log.e(LOG_TAG, "Failed to load image.", e);
             return null;
