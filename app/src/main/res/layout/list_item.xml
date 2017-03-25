@@ -12,6 +12,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center"
     android:orientation="horizontal"
     android:padding="@dimen/activity_margin">
 
@@ -20,9 +21,11 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_gravity="center_vertical"
+        android:layout_weight="0"
+        android:background="@drawable/ic_soul_shells_logo"
         android:contentDescription="Thumbnail of Image Displayed"
         android:gravity="center"
-        android:padding="10dp" />
+        android:padding="5dp" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -30,7 +33,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:orientation="vertical">
 
         <TextView
@@ -54,15 +57,38 @@
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="#2B3D4D" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="@string/price_list"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@android:color/holo_blue_dark" />
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@android:color/holo_blue_dark" />
+
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="2dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:orientation="vertical">
 
         <TextView
@@ -72,7 +98,7 @@
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
             android:maxLines="1"
-            android:text="COLOR"
+            android:text="@string/color"
             android:textAllCaps="true"
             android:textColor="@color/textColorHeadings"
             android:textSize="12sp" />
@@ -82,8 +108,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:text="Color Assigned to Shell"
+            android:text="@string/color_assigned_to_shell"
             android:textAppearance="?android:textAppearanceSmall"
             android:textColor="#2B3D4D" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="@string/quantity_list"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/textColorHeadings" />
+
+            <TextView
+                android:id="@+id/quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="#2B3D4D" />
+        </LinearLayout>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button"
+        style="@android:style/Widget.Button.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:backgroundTint="#F0514B"
+        android:focusable="false"
+        android:padding="5dp"
+        android:text="@string/sale"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColor="@drawable/button_text_color" />
 </LinearLayout>

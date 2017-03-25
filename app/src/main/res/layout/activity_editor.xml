@@ -10,270 +10,287 @@
      limitations under the License.
 
 --><!-- Layout for the editor -->
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fillViewport="true">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/activity_margin"
-    tools:context="us.theparamountgroup.android.inventory.EditorActivity">
-
-    <!-- Overview category -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <!-- Label -->
-        <!-- Name field -->
-        <TextView
-            style="@style/CategoryStyle"
-            android:text="Name" />
-
-        <!-- Input fields -->
-
-
-
-        <EditText
-            android:id="@+id/edit_shell_name"
-            style="@style/EditorFieldStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_shell_name"
-            android:layout_weight="2"
-            android:inputType="textCapWords" />
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_margin"
+        tools:context="us.theparamountgroup.android.inventory.EditorActivity">
 
-        <!-- Label -->
-        <TextView
-            style="@style/CategoryStyle"
-            android:text="Color"
-          />
-        <!-- Color field -->
-        <EditText
-            android:id="@+id/edit_shell_color"
-            style="@style/EditorFieldStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:hint="@string/hint_shell_color"
-            android:inputType="textCapWords" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <!-- Hole category -->
+        <!-- Shell Editor Layout -->
         <LinearLayout
-            android:id="@+id/container_hole"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="horizontal">
 
-            <!-- Label -->
+            <!-- Name field -->
             <TextView
                 style="@style/CategoryStyle"
-                android:text="@string/category_hole" />
+                android:text="Name" />
 
-            <!-- Input field -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:orientation="vertical">
+            <!-- Input fields -->
 
-                <!-- Gender drop-down spinner -->
-                <Spinner
-                    android:id="@+id/spinner_hole"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:paddingRight="16dp"
-                    android:spinnerMode="dropdown" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Type category -->
-        <LinearLayout
-            android:id="@+id/container_type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <!-- Label -->
-            <TextView
-                style="@style/CategoryStyle"
-                android:text="@string/category_type" />
-
-            <!-- Input field -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <!-- Gender drop-down spinner -->
-                <Spinner
-                    android:id="@+id/spinner_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:paddingRight="16dp"
-                    android:spinnerMode="dropdown" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <LinearLayout
-
-            style="@style/CategoryStyle"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Quantity"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:textColor="@color/colorAccent" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/plus"
-                    android:layout_width="32dp"
-                    android:layout_height="37dp"
-                    android:onClick="addQuantity"
-                    android:text="+"
-                    android:textAppearance="?android:textAppearanceSmall" />
-
-                <Button
-                    android:id="@+id/minus"
-                    android:layout_width="32dp"
-                    android:layout_height="37dp"
-                    android:onClick="subtractQuantity"
-                    android:text="-"
-                    android:textAppearance="?android:textAppearanceSmall" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/edit_product_quantity"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="2"
-            android:fontFamily="sans-serif-light"
-            android:hint="Quantity"
-            android:paddingLeft="4dp"
-            android:textAppearance="?android:textAppearanceMedium" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-medium"
-            android:text="Price"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@color/colorAccent" />
-
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:paddingLeft="4dp">
 
             <EditText
-                android:id="@+id/edit_product_price"
+                android:id="@+id/edit_shell_name"
                 style="@style/EditorFieldStyle"
-                android:hint="Price"
-                android:inputType="numberDecimal"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="@string/hint_shell_name"
+                android:inputType="textCapWords"
+                android:textColor="@color/altColorAccent"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Label -->
+            <TextView
+                style="@style/CategoryStyle"
+                android:text="Color" />
+            <!-- Color field -->
+            <EditText
+                android:id="@+id/edit_shell_color"
+                style="@style/EditorFieldStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="@string/hint_shell_color"
+                android:inputType="textCapWords"
+                android:textColor="@color/altColorAccent"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Hole category -->
+            <LinearLayout
+                android:id="@+id/container_hole"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <!-- Label -->
+                <TextView
+                    style="@style/CategoryStyle"
+                    android:layout_weight="1"
+                    android:text="@string/category_hole" />
+
+                <!-- Input field -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:soundEffectsEnabled="true">
+
+                    <!-- Gender drop-down spinner -->
+                    <Spinner
+                        android:id="@+id/spinner_hole"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:paddingRight="16dp"
+                        android:spinnerMode="dropdown" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Type category -->
+            <LinearLayout
+                android:id="@+id/container_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <!-- Label -->
+                <TextView
+                    style="@style/CategoryStyle"
+                    android:layout_weight="1"
+                    android:text="@string/category_type" />
+
+                <!-- Input field -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="vertical">
+
+                    <!-- Gender drop-down spinner -->
+                    <Spinner
+                        android:id="@+id/spinner_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:paddingRight="16dp"
+                        android:spinnerMode="dropdown" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+
+                style="@style/CategoryStyle"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/quantity"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:textColor="@color/colorPrimary" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/plus"
+                        android:layout_width="32dp"
+                        android:layout_height="37dp"
+                        android:onClick="addQuantity"
+                        android:text="+"
+                        android:textAppearance="?android:textAppearanceSmall" />
+
+                    <Button
+                        android:id="@+id/minus"
+                        android:layout_width="32dp"
+                        android:layout_height="37dp"
+                        android:onClick="subtractQuantity"
+                        android:text="-"
+                        android:textAppearance="?android:textAppearanceSmall" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/label_weight_units"
-                style="@style/EditorUnitsStyle"
-                android:text="Dollars" />
-        </RelativeLayout>
-    </LinearLayout>
+                android:id="@+id/edit_product_quantity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:fontFamily="sans-serif-light"
+                android:hint="@string/quantity"
+                android:paddingStart="4dp"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/altColorAccent"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/order"
-        android:layout_width="140dp"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
-        android:onClick="orderProduct"
-        android:text="Order" />
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <Button
-            android:id="@+id/select_photo"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:onClick="openImageSelector"
-            android:text="Select photo" />
-
-        <Button
-            android:id="@+id/take_photo"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_toEndOf="@+id/select_photo"
-            android:layout_toRightOf="@+id/select_photo"
-            android:onClick="takePicture"
-            android:text="Take photo" />
-
-
-        <ImageView
-            android:id="@+id/image"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/select_photo"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            />
-    </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-</LinearLayout>
+            <TextView
+                style="@style/CategoryStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/price"
+                android:textAppearance="?android:textAppearanceMedium" />
+
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:paddingLeft="4dp">
+
+                <EditText
+                    android:id="@+id/edit_product_price"
+                    style="@style/EditorFieldStyle"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+
+                    android:hint="@string/price"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/altColorAccent"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/label_weight_units"
+                    style="@style/EditorUnitsStyle"
+                    android:layout_alignBaseline="@+id/edit_product_price"
+                    android:layout_alignBottom="@+id/edit_product_price"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/dollars" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+
+            <Button
+                android:id="@+id/select_photo"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:onClick="openImageSelector"
+                android:text="Select photo" />
+
+
+            <Button
+                android:id="@+id/take_photo"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="10dp"
+                android:onClick="takePicture"
+                android:text="Take photo" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
+
+            <Button
+                android:id="@+id/order"
+                android:layout_width="140dp"
+                android:layout_height="70dp"
+                android:layout_alignBottom="@+id/image"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="15dp"
+                android:onClick="orderProduct"
+                android:text="Order" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
 </ScrollView>

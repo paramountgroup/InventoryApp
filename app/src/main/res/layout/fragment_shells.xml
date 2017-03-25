@@ -43,8 +43,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/empty_shelter_image"
             android:layout_centerHorizontal="true"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="serif"
             android:paddingTop="16dp"
+            android:textStyle="bold|italic"
             android:text="@string/empty_view_title_text"
             android:textAppearance="?android:textAppearanceMedium"/>
 

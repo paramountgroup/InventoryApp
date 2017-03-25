@@ -12,13 +12,17 @@
 -->
 <resources>
     <!-- The app branding color for the app bar -->
-    <color name="colorPrimary">#F0514B</color>
+    <color name="colorPrimary">#322D73</color>
 
     <!-- Darker variant for the status bar and contextual app bars -->
-    <color name="colorPrimaryDark">#C0403C</color>
+    <color name="colorPrimaryDark">#252154</color>
 
     <!-- Accent color for UI controls like checkboxes and text fields -->
-    <color name="colorAccent">#F0514B</color>
+    <color name="colorAccent">#FB8A52</color>
+
+    <!-- Accent color for UI controls like checkboxes and text fields -->
+    <color name="altColorAccent">#11D6E0</color>
+
 
     <!-- Primary color for the editor -->
     <color name="editorColorPrimary">#2D3640</color>
@@ -28,6 +32,6 @@
     <!-- Background color for app -->
     <color name="blue_background">#90CAF9</color>
 
-    <!-- Text color for the details of the earthquake in the list item -->
-    <color name="textColorHeadings">#B4BAC0</color>
+    <!-- Text color for the details of the shells in the list item -->
+    <color name="textColorHeadings">#ABA8B2</color>
 </resources>

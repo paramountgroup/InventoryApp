@@ -537,7 +537,7 @@ public class EditorActivity extends AppCompatActivity implements
             mNameEditText.setText(name);
             mColorEditText.setText(color);
             mQuantityTextView.setText(Integer.toString(quantity));
-            mPriceEditText.setText(Double.toString(price));
+            mPriceEditText.setText("$" + Double.toString(price));
 
             if (!photo.isEmpty()) {
                 mUri = Uri.parse(photo);
@@ -851,16 +851,22 @@ public class EditorActivity extends AppCompatActivity implements
             }
         }
     }
-    public void orderProduct(View view) {
-        String nameProduct = mNameEditText.getText().toString();
 
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-        intent.putExtra(Intent.EXTRA_EMAIL, "supplier@example.com");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Order " + nameProduct);
+    /* orderProduct will send users to the website www.soulshells.com where they
+     * can order their own shell necklace */
+    public void orderProduct(View view) {
+
+        String url = "https://www.soulshells.com";
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        // first verify that an app exists to receive the intent
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
+        } else {
+            Toast.makeText(this, "Sorry no access to the website www.soulshells.com", Toast.LENGTH_SHORT).show();
+            return;
         }
+
     }
 
     public void addQuantity(View view) {
