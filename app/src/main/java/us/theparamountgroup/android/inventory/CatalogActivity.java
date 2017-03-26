@@ -12,6 +12,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Credit Udacity lesson ud845-Pets-lesson-four for the primary components and Forum Mentor on Github
+ * cavi2016 project Inventory 10 image retrieval and saving to file.
  */
 package us.theparamountgroup.android.inventory;
 

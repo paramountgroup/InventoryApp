@@ -12,7 +12,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Credit Udacity lesson ud845-Pets-lesson-four for the primary components and Forum Mentor on Github
+ * cavi2016 project Inventory 10 image retrieval and saving to file.
  */
+
 package us.theparamountgroup.android.inventory;
 
 import android.Manifest;
@@ -130,7 +134,7 @@ public class EditorActivity extends AppCompatActivity implements
     private Button mButtonTakePicture;
     private Uri mUri;
     private Bitmap mBitmap;
-    private boolean isGalleryPicture = false;
+    //   private boolean isGalleryPicture = false;
     private TextView mQuantityTextView;
     private EditText mPriceEditText;
     /**
@@ -145,15 +149,11 @@ public class EditorActivity extends AppCompatActivity implements
         }
     };
 
-    public static Context getContextOfApplication() {
-        return contextOfApplication;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // contextOfApplication = getApplicationContext();
         setContentView(R.layout.activity_editor);
 
         // Examine the intent that was used to launch this activity,
@@ -210,12 +210,12 @@ public class EditorActivity extends AppCompatActivity implements
                 Log.i(LOG_TAG, " in onGlobalLayout trying to get image to appear");
                 mImageView.setImageResource(R.drawable.ic_soul_shells_logo);
                 mImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                // mImageView.setImageBitmap(getBitmapFromUri(mUri));
             }
         });
+        // assign TAKE PHOTO button to mButtonTakePicture variable.
         mButtonTakePicture = (Button) findViewById(R.id.take_photo);
         mButtonTakePicture.setEnabled(false);
-
+// ask permission to use the camera and image gallery
         requestPermissions();
         setupHoleSpinner();
         setupTypeSpinner();
@@ -288,9 +288,7 @@ public class EditorActivity extends AppCompatActivity implements
                     } else if (selection.equals(getString(R.string.type_slipper))) {
                         mType = ShellContract.ShellEntry.TYPE_SLIPPER;
                     } else {
-
                         mType = ShellContract.ShellEntry.TYPE_SHARD;
-                        Log.i(LOG_TAG, " In type spinner and assigned mType to shard: " + mType);
                     }
                 }
             }
@@ -307,8 +305,8 @@ public class EditorActivity extends AppCompatActivity implements
      * Get user input from editor and save pet into database.
      */
     private void saveShell() {
-        Log.i(LOG_TAG, " in saveShell: ");
-        byte[] thumbImage = null;
+        int THUMBSIZE = 75;
+        byte[] thumbImage = null;// byte array variable used to store in data base
         String photoString;
         // Read from input fields
         // Use trim to eliminate leading or trailing white space and convert to a string
@@ -320,8 +318,8 @@ public class EditorActivity extends AppCompatActivity implements
         /* check to see if an image taken with the camera or chosen from the device */
         if (mUri != null) {
             photoString = mUri.toString();
-            // if there is an image make a corresponding thumbnail bitmap image
-            Bitmap bitThumbImage = ThumbnailUtils.extractThumbnail(mBitmap, 75, 75);
+            // if there is an image make a corresponding thumbnail bitmap image size 75x75
+            Bitmap bitThumbImage = ThumbnailUtils.extractThumbnail(mBitmap, THUMBSIZE, THUMBSIZE);
             // convert thumbnail bitmap to byte array
             thumbImage = getBytes(bitThumbImage);
         } else {
@@ -332,7 +330,8 @@ public class EditorActivity extends AppCompatActivity implements
         // Check if this is supposed to be a new shell
         // and check if all the fields in the editor are blank
         if (mCurrentShellUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(colorString) && mHole == ShellContract.ShellEntry.HOLE_UNKNOWN && TextUtils.isEmpty(photoString) && TextUtils.isEmpty(priceString)) {
+                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(colorString) && mHole == ShellContract.ShellEntry.HOLE_UNKNOWN
+                && TextUtils.isEmpty(photoString) && TextUtils.isEmpty(priceString)) {
             // Since no fields were modified, we can return early without creating a new shell.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             Toast.makeText(this, "No information for a shell was entered\n\n Shell Was Not Saved", Toast.LENGTH_LONG).show();
@@ -538,7 +537,6 @@ public class EditorActivity extends AppCompatActivity implements
             int photoColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_PHOTO);
             int quantityColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY);
             int priceColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_PRICE);
-         //   int thumbnailColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_THUMBNAIL);
 
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
@@ -548,7 +546,7 @@ public class EditorActivity extends AppCompatActivity implements
             String photo = cursor.getString(photoColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             double price = cursor.getDouble(priceColumnIndex);
-           // byte[] thumbnail = cursor.getBlob(thumbnailColumnIndex);
+
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
@@ -623,14 +621,14 @@ public class EditorActivity extends AppCompatActivity implements
     private void showUnsavedChangesDialog(
             DialogInterface.OnClickListener discardButtonClickListener) {
         // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
+        // for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.unsaved_changes_dialog_msg);
         builder.setPositiveButton(R.string.discard, discardButtonClickListener);
         builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Keep editing" button, so dismiss the dialog
-                // and continue editing the pet.
+                // and continue editing the shell.
                 if (dialog != null) {
                     dialog.dismiss();
                 }
@@ -643,11 +641,11 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
     /**
-     * Prompt the user to confirm that they want to delete this pet.
+     * Prompt the user to confirm that they want to delete this shell.
      */
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
+        // for the positivee and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.delete_dialog_msg);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
@@ -698,10 +696,13 @@ public class EditorActivity extends AppCompatActivity implements
         finish();
     }
 
+    /*********************** This section primary is used obtaining and storing images  ******************
+     * credit Forum Mentor on Github
+     * cavi2016 project Inventory10 for methods used below.
 
-    /*********************** New Stuff *******************/
+     */
 
-
+    // Request permission to read/write external storage
     public void requestPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -772,8 +773,8 @@ public class EditorActivity extends AppCompatActivity implements
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
+    // create file to store image
     private File createImageFile() throws IOException {
-        Log.i(LOG_TAG, "in createImageFile");
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -791,6 +792,9 @@ public class EditorActivity extends AppCompatActivity implements
         return image;
     }
 
+    /* onActivityResult getBitmapFromUri assign to the mImageView in the Editor and scale
+    * to fit in the available space.
+    */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         Log.i(LOG_TAG, "Received an \"Activity Result\"");
@@ -802,20 +806,20 @@ public class EditorActivity extends AppCompatActivity implements
                 mBitmap = getBitmapFromUri(mUri);
                 mImageView.setImageBitmap(mBitmap);
                 mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-                isGalleryPicture = true;
             }
+
         } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             Log.i(LOG_TAG, "Uri: " + mUri.toString());
 
             mBitmap = getBitmapFromUri(mUri);
             mImageView.setImageBitmap(mBitmap);
             mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-            isGalleryPicture = false;
         }
     }
 
+    /* getBitmapFromUri method is called return a bitmap image using the passed Uri.
+    *
+    * */
     private Bitmap getBitmapFromUri(Uri uri) {
         if (uri == null) {
             return null;
@@ -874,6 +878,8 @@ public class EditorActivity extends AppCompatActivity implements
 
     }
 
+    /* addQuantity using button in editor
+     */
     public void addQuantity(View view) {
         int quantity;
         String quantityString = mQuantityTextView.getText().toString();
@@ -887,6 +893,8 @@ public class EditorActivity extends AppCompatActivity implements
         mQuantityTextView.setText(String.valueOf(quantity));
     }
 
+    /* subtractQuantity using button in editor
+ */
     public void subtractQuantity(View view) {
         int quantity;
         String quantityString = mQuantityTextView.getText().toString();
