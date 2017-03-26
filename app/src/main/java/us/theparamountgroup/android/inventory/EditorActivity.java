@@ -184,7 +184,7 @@ public class EditorActivity extends AppCompatActivity implements
         mTypeSpinner = (Spinner) findViewById(R.id.spinner_type);
 
         mQuantityTextView = (TextView) findViewById(R.id.edit_product_quantity);
-        mPriceEditText = (EditText) findViewById(R.id.edit_product_price);
+        mPriceEditText = (EditText) findViewById(R.id.price_enter);
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
@@ -308,37 +308,34 @@ public class EditorActivity extends AppCompatActivity implements
 
         String photoString;
         // Read from input fields
-        // Use trim to eliminate leading or trailing white space
+        // Use trim to eliminate leading or trailing white space and convert to a string
         String nameString = mNameEditText.getText().toString().trim();
         String colorString = mColorEditText.getText().toString().trim();
         String quantityString = mQuantityTextView.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
-       /*
-        // remove the number sign if necessary
-        if (TextUtils.isEmpty(priceString)){
-            return;
+
+        /* check to see if an image taken with the camera of chosen from the device */
+        if (mUri != null) {
+            photoString = mUri.toString();
+        } else {
+            photoString = "";
         }
-        else if (!Character.isDigit(priceString.charAt(0))){
-            priceString = priceString.substring(1);
-        }
-*/
+
 
 
         // Check if this is supposed to be a new shell
         // and check if all the fields in the editor are blank
         if (mCurrentShellUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(colorString) && mHole == ShellContract.ShellEntry.HOLE_UNKNOWN) {
+                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(colorString) && mHole == ShellContract.ShellEntry.HOLE_UNKNOWN && TextUtils.isEmpty(photoString) && TextUtils.isEmpty(priceString)) {
             // Since no fields were modified, we can return early without creating a new shell.
             // No need to create ContentValues and no need to do any ContentProvider operations.
+            Toast.makeText(this, "No information for a shell was entered\n\n Shell Was Not Saved", Toast.LENGTH_LONG).show();
+            Intent i = getIntent();
+            finish();
+            startActivity(i);
             return;
         }
-        if (mUri != null) {
-            Log.i(LOG_TAG, "in Save shell Lets see what mUri has for us: " + mUri);
-            photoString = mUri.toString();
-            Log.i(LOG_TAG, " Lets see what photoString has for us: " + photoString);
-        } else {
-            photoString = "";
-        }
+
 
         int quantity = 0;
         if (!TextUtils.isEmpty(quantityString)) {
@@ -731,7 +728,7 @@ public class EditorActivity extends AppCompatActivity implements
             }
         }
     }
-
+/* Take picture using camera and save to file using MediaStore. Image location uri stored in variable mUri*/
     public void takePicture(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Log.i(LOG_TAG, "in takePicture");
@@ -748,7 +745,7 @@ public class EditorActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
     }
-
+/* select an image already on device */
     public void openImageSelector(View view) {
         Intent intent;
         Log.e(LOG_TAG, "While is set and the ifs are worked through.");

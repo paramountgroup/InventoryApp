@@ -148,5 +148,6 @@
         android:padding="5dp"
         android:text="@string/sale"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
-        android:textColor="@drawable/button_text_color" />
+        android:textColor="@drawable/button_text_color"
+       />
 </LinearLayout>
