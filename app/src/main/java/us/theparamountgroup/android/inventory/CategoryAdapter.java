@@ -65,6 +65,4 @@ public class CategoryAdapter extends FragmentPagerAdapter {
             return mContext.getString(R.string.shard);
         }
     }
-
-
 }

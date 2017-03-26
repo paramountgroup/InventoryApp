@@ -31,13 +31,19 @@ import us.theparamountgroup.android.inventory.data.ShellContract.ShellEntry;
  */
 public class ShellProvider extends ContentProvider {
 
-    /** Tag for the log messages */
+    /**
+     * Tag for the log messages
+     */
     public static final String LOG_TAG = ShellProvider.class.getSimpleName();
 
-    /** URI matcher code for the content URI for the pets table */
+    /**
+     * URI matcher code for the content URI for the pets table
+     */
     private static final int SHELLS = 100;
 
-    /** URI matcher code for the content URI for a single pet in the pets table */
+    /**
+     * URI matcher code for the content URI for a single pet in the pets table
+     */
     private static final int SHELL_ID = 101;
 
     /**
@@ -68,7 +74,9 @@ public class ShellProvider extends ContentProvider {
         sUriMatcher.addURI(ShellContract.CONTENT_AUTHORITY, ShellContract.PATH_SHELLS + "/#", SHELL_ID);
     }
 
-    /** Database helper object */
+    /**
+     * Database helper object
+     */
     private ShellDbHelper mDbHelper;
 
     @Override
@@ -81,9 +89,6 @@ public class ShellProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
 
-        Log.i(LOG_TAG, "in query and selection is: " + selection);
-        Log.i(LOG_TAG, "in query and projection is: " + projection[0]);
-        //Log.i(LOG_TAG, "in query and selectionArgs is: " + selectionArgs[0]);
         // Get readable database
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
 
@@ -110,7 +115,7 @@ public class ShellProvider extends ContentProvider {
                 // arguments that will fill in the "?". Since we have 1 question mark in the
                 // selection, we have 1 String in the selection arguments' String array.
                 selection = ShellEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 // This will perform a query on the pets table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
@@ -159,7 +164,6 @@ public class ShellProvider extends ContentProvider {
         }
 
 
-
         // No need to check the color, any value is valid (including null).
 
         // Get writeable database
@@ -192,7 +196,7 @@ public class ShellProvider extends ContentProvider {
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = ShellEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateShell(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
@@ -200,8 +204,8 @@ public class ShellProvider extends ContentProvider {
     }
 
     /**
-     * Update pets in the database with the given content values. Apply the changes to the rows
-     * specified in the selection and selection arguments (which could be 0 or 1 or more pets).
+     * Update shells in the database with the given content values. Apply the changes to the rows
+     * specified in the selection and selection arguments (which could be 0 or 1 or more shell).
      * Return the number of rows that were successfully updated.
      */
     private int updateShell(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
@@ -233,7 +237,7 @@ public class ShellProvider extends ContentProvider {
             }
         }
 
-        // No need to check the breed, any value is valid (including null).
+        // No need to check the hole type, any value is valid (including null).
 
         // If there are no values to update, then don't try to update the database
         if (values.size() == 0) {
@@ -273,7 +277,7 @@ public class ShellProvider extends ContentProvider {
             case SHELL_ID:
                 // Delete a single row given by the ID in the URI
                 selection = ShellContract.ShellEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = database.delete(ShellContract.ShellEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
