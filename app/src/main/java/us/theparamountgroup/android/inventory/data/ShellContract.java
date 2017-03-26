@@ -15,18 +15,14 @@
  */
 package us.theparamountgroup.android.inventory.data;
 
-import android.net.Uri;
 import android.content.ContentResolver;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
  * API Contract for the Pets app.
  */
 public final class ShellContract {
-
-    // To prevent someone from accidentally instantiating the contract class,
-    // give it an empty constructor.
-    private ShellContract() {}
 
     /**
      * The "Content authority" is a name for the entire content provider, similar to the
@@ -35,13 +31,11 @@ public final class ShellContract {
      * device.
      */
     public static final String CONTENT_AUTHORITY = "us.theparamountgroup.android.inventory";
-
     /**
      * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
      * the content provider.
      */
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-
     /**
      * Possible path (appended to base content URI for possible URI's)
      * For instance, content://com.example.android.shells/shells/ is a valid path for
@@ -50,13 +44,20 @@ public final class ShellContract {
      */
     public static final String PATH_SHELLS = "shells";
 
+    // To prevent someone from accidentally instantiating the contract class,
+    // give it an empty constructor.
+    private ShellContract() {
+    }
+
     /**
      * Inner class that defines constant values for the pets database table.
      * Each entry in the table represents a single pet.
      */
     public static final class ShellEntry implements BaseColumns {
 
-        /** The content URI to access the pet data in the provider */
+        /**
+         * The content URI to access the pet data in the provider
+         */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_SHELLS);
 
         /**
@@ -71,44 +72,46 @@ public final class ShellContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SHELLS;
 
-        /** Name of database table for pets */
+        /**
+         * Name of database table for pets
+         */
         public final static String TABLE_NAME = "shells";
 
 
         /**
          * Unique ID number for the pet (only for use in the database table).
-         *
+         * <p>
          * Type: INTEGER
          */
         public final static String _ID = BaseColumns._ID;
 
         /**
          * Name of the pet.
-         *
+         * <p>
          * Type: TEXT
          */
-        public final static String COLUMN_SHELL_NAME ="name";
+        public final static String COLUMN_SHELL_NAME = "name";
 
         /**
          * Color of the shell.
-         *
+         * <p>
          * Type: TEXT
          */
         public final static String COLUMN_SHELL_COLOR = "color";
 
         /**
          * Photo of the shell.
-         *
+         * <p>
          * Type: TEXT
          */
         public final static String COLUMN_SHELL_PHOTO = "photo";
 
         /**
          * Does the shell have a hole.
-         *
+         * <p>
          * The only possible values are {@link #HOLE_UNKNOWN}, {@link #HOLE},
          * or {@link #NO_HOLE}.
-         *
+         * <p>
          * Type: INTEGER
          */
         public final static String COLUMN_SHELL_HOLE = "hole";
@@ -121,8 +124,8 @@ public final class ShellContract {
         public static final int NO_HOLE = 2;
 
         /**
-         * Weight of the pet.
-         *
+         * Types of shells
+         * <p>
          * Type: INTEGER
          */
         public final static String COLUMN_SHELL_TYPE = "type";
@@ -132,9 +135,11 @@ public final class ShellContract {
         public static final int TYPE_SLIPPER = 2;
         public static final int TYPE_SHARD = 3;
 
+        /* Column heading string constants   */
 
         public static final String COLUMN_SHELL_QUANTITY = "quantity";
         public static final String COLUMN_SHELL_PRICE = "price";
+        public static final String COLUMN_SHELL_THUMBNAIL = "thumbnail";
 
 
         /**
@@ -149,7 +154,7 @@ public final class ShellContract {
         }
 
         /**
-         * Returns whether or not the given gender is {@link #HOLE_UNKNOWN}, {@link #HOLE},
+         * Returns whether or not the given shell is {@link #HOLE_UNKNOWN}, {@link #HOLE},
          * or {@link #NO_HOLE}.
          */
         public static boolean isValidType(int shellType) {

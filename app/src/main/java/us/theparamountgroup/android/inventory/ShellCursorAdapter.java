@@ -18,9 +18,7 @@ package us.theparamountgroup.android.inventory;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.TextUtils;
@@ -34,10 +32,9 @@ import android.widget.TextView;
 
 import com.theparamountgroup.android.inventory.R;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-
 import us.theparamountgroup.android.inventory.data.ShellContract;
+
+import static us.theparamountgroup.android.inventory.data.DbBitmapUtility.getImage;
 
 /**
  * {@link ShellCursorAdapter} is an adapter for a list or grid view
@@ -95,24 +92,47 @@ public class ShellCursorAdapter extends CursorAdapter {
         TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
         ImageView photoImageView = (ImageView) view.findViewById(R.id.thumbnail);
-        // Find the columns of pet attributes that we're interested in
+        // Find the columns of shell attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_NAME);
         int colorColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_COLOR);
         int photoColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_PHOTO);
         int quantityColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY);
         int priceColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_PRICE);
-
-        // Read the pet attributes from the Cursor for the current pet
+        int thumbnailColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_THUMBNAIL);
+        // Read the shell attributes from the Cursor for the current shell
         String shellName = cursor.getString(nameColumnIndex);
         Log.i(LOG_TAG, " Lets find the stored string for the shellName: " + shellName);
         String shellColor = cursor.getString(colorColumnIndex);
         Log.i(LOG_TAG, " Lets find the stored string for the shellColor: " + shellColor);
         String shellQuantity = cursor.getString(quantityColumnIndex);
         String shellPrice = cursor.getString(priceColumnIndex);
-
-
         String photo = cursor.getString(photoColumnIndex);
 
+
+
+        if (!photo.isEmpty()) {
+            try {
+                byte[] thumbnail = cursor.getBlob(thumbnailColumnIndex);
+                Bitmap thumbImage = getImage(thumbnail);
+                photoImageView.setBackground(null);
+                int cornerRadius = 10;
+                RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(context.getResources(), thumbImage);
+                dr.setCornerRadius(cornerRadius);
+                photoImageView.setImageDrawable(dr);
+
+            } catch (Exception e) {
+                Log.e("ThumbnailUtils", "Problem extracting thumbnail", e);
+                e.printStackTrace();
+            }
+        }
+
+
+
+
+
+
+
+        /*
         if (!photo.isEmpty()) {
             try {
                 Uri myUri = Uri.parse(photo);
@@ -133,6 +153,8 @@ public class ShellCursorAdapter extends CursorAdapter {
                 e.printStackTrace();
             }
         }
+
+        */
         // If the shell color is empty string or null, then use some default text
         // that says "Unknown color", so the TextView isn't blank.
         if (TextUtils.isEmpty(shellColor)) {

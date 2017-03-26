@@ -29,6 +29,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -65,6 +66,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import us.theparamountgroup.android.inventory.data.ShellContract;
+
+import static us.theparamountgroup.android.inventory.data.DbBitmapUtility.getBytes;
 
 /**
  * Allows user to create a new shell or edit an existing one.
@@ -150,7 +153,7 @@ public class EditorActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       // contextOfApplication = getApplicationContext();
+        // contextOfApplication = getApplicationContext();
         setContentView(R.layout.activity_editor);
 
         // Examine the intent that was used to launch this activity,
@@ -207,7 +210,7 @@ public class EditorActivity extends AppCompatActivity implements
                 Log.i(LOG_TAG, " in onGlobalLayout trying to get image to appear");
                 mImageView.setImageResource(R.drawable.ic_soul_shells_logo);
                 mImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-               // mImageView.setImageBitmap(getBitmapFromUri(mUri));
+                // mImageView.setImageBitmap(getBitmapFromUri(mUri));
             }
         });
         mButtonTakePicture = (Button) findViewById(R.id.take_photo);
@@ -305,7 +308,7 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private void saveShell() {
         Log.i(LOG_TAG, " in saveShell: ");
-
+        byte[] thumbImage = null;
         String photoString;
         // Read from input fields
         // Use trim to eliminate leading or trailing white space and convert to a string
@@ -314,13 +317,16 @@ public class EditorActivity extends AppCompatActivity implements
         String quantityString = mQuantityTextView.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
 
-        /* check to see if an image taken with the camera of chosen from the device */
+        /* check to see if an image taken with the camera or chosen from the device */
         if (mUri != null) {
             photoString = mUri.toString();
+            // if there is an image make a corresponding thumbnail bitmap image
+            Bitmap bitThumbImage = ThumbnailUtils.extractThumbnail(mBitmap, 75, 75);
+            // convert thumbnail bitmap to byte array
+            thumbImage = getBytes(bitThumbImage);
         } else {
             photoString = "";
         }
-
 
 
         // Check if this is supposed to be a new shell
@@ -358,6 +364,7 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_PHOTO, photoString);
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY, quantity);
         values.put(ShellContract.ShellEntry.COLUMN_SHELL_PRICE, price);
+        values.put(ShellContract.ShellEntry.COLUMN_SHELL_THUMBNAIL, thumbImage);
 
 
         // Determine if this is a new or existing shell by checking if mCurrentShellUri is null or not
@@ -501,7 +508,8 @@ public class EditorActivity extends AppCompatActivity implements
                 ShellContract.ShellEntry.COLUMN_SHELL_TYPE,
                 ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY,
                 ShellContract.ShellEntry.COLUMN_SHELL_PRICE,
-                ShellContract.ShellEntry.COLUMN_SHELL_PHOTO};
+                ShellContract.ShellEntry.COLUMN_SHELL_PHOTO,
+                ShellContract.ShellEntry.COLUMN_SHELL_THUMBNAIL};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -530,6 +538,7 @@ public class EditorActivity extends AppCompatActivity implements
             int photoColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_PHOTO);
             int quantityColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY);
             int priceColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_PRICE);
+         //   int thumbnailColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_THUMBNAIL);
 
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
@@ -539,6 +548,7 @@ public class EditorActivity extends AppCompatActivity implements
             String photo = cursor.getString(photoColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             double price = cursor.getDouble(priceColumnIndex);
+           // byte[] thumbnail = cursor.getBlob(thumbnailColumnIndex);
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
@@ -551,8 +561,6 @@ public class EditorActivity extends AppCompatActivity implements
                 mBitmap = getBitmapFromUri(mUri);
                 mImageView.setImageBitmap(mBitmap);
             }
-
-
 
 
             // Hole is a dropdown spinner, so map the constant value from the database
@@ -590,7 +598,6 @@ public class EditorActivity extends AppCompatActivity implements
             }
         }
     }
-
 
 
     @Override
@@ -728,7 +735,8 @@ public class EditorActivity extends AppCompatActivity implements
             }
         }
     }
-/* Take picture using camera and save to file using MediaStore. Image location uri stored in variable mUri*/
+
+    /* Take picture using camera and save to file using MediaStore. Image location uri stored in variable mUri*/
     public void takePicture(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Log.i(LOG_TAG, "in takePicture");
@@ -745,7 +753,8 @@ public class EditorActivity extends AppCompatActivity implements
             e.printStackTrace();
         }
     }
-/* select an image already on device */
+
+    /* select an image already on device */
     public void openImageSelector(View view) {
         Intent intent;
         Log.e(LOG_TAG, "While is set and the ifs are worked through.");

@@ -115,7 +115,8 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
                 ShellEntry.COLUMN_SHELL_HOLE,
                 ShellEntry.COLUMN_SHELL_QUANTITY,
                 ShellEntry.COLUMN_SHELL_PRICE,
-                ShellEntry.COLUMN_SHELL_PHOTO};
+                ShellEntry.COLUMN_SHELL_PHOTO,
+                ShellEntry.COLUMN_SHELL_THUMBNAIL};
 
 
         String[] scallopArgument = {

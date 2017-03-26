@@ -186,14 +186,14 @@ public class ShellProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case SHELLS:
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                return updateShell(uri, contentValues, selection, selectionArgs);
             case SHELL_ID:
                 // For the SHELL_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = ShellEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                return updateShell(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
@@ -204,7 +204,7 @@ public class ShellProvider extends ContentProvider {
      * specified in the selection and selection arguments (which could be 0 or 1 or more pets).
      * Return the number of rows that were successfully updated.
      */
-    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    private int updateShell(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // If the {@link ShellEntry#COLUMN_SHELL_NAME} key is present,
         // check that the name value is not null.
         if (values.containsKey(ShellContract.ShellEntry.COLUMN_SHELL_NAME)) {
