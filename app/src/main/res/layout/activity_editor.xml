@@ -227,16 +227,28 @@
                 android:layout_weight="2"
                 android:paddingLeft="4dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/CategoryStyle"
+                    android:layout_marginRight="10dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/altColorAccent"
+                    android:text="$"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    />
+
                 <EditText
                     android:id="@+id/edit_product_price"
                     style="@style/EditorFieldStyle"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
                     android:digits="@string/only_numbers"
                     android:hint="@string/price"
                     android:inputType="textFilter"
                     android:textColor="@color/altColorAccent"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true" />
 
                 <TextView
                     android:id="@+id/label_price_units"

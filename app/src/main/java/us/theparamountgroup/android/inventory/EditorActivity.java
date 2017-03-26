@@ -305,17 +305,23 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private void saveShell() {
         Log.i(LOG_TAG, " in saveShell: ");
+
+        String photoString;
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
         String colorString = mColorEditText.getText().toString().trim();
         String quantityString = mQuantityTextView.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
+       /*
         // remove the number sign if necessary
-        if (!Character.isDigit(priceString.charAt(0))){
+        if (TextUtils.isEmpty(priceString)){
+            return;
+        }
+        else if (!Character.isDigit(priceString.charAt(0))){
             priceString = priceString.substring(1);
         }
-        String photoString;
+*/
 
 
         // Check if this is supposed to be a new shell
@@ -541,7 +547,7 @@ public class EditorActivity extends AppCompatActivity implements
             mNameEditText.setText(name);
             mColorEditText.setText(color);
             mQuantityTextView.setText(Integer.toString(quantity));
-            mPriceEditText.setText("$" + Double.toString(price));
+            mPriceEditText.setText(Double.toString(price));
 
             if (!photo.isEmpty()) {
                 mUri = Uri.parse(photo);
