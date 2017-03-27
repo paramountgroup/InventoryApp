@@ -13,6 +13,8 @@ Citing Code Sources
 - Additional support for image file read/write based on github cavi/2016 Inventory10
 * https://github.com/cavi2016/Inventory10
 
+- numerous suggestions from stackoverflow
+
 
 Pre-requisites
 --------------
