@@ -330,11 +330,12 @@ public class EditorActivity extends AppCompatActivity implements
         // Check if this is supposed to be a new shell
         // and check if all the fields in the editor are blank
         if (mCurrentShellUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(colorString) && mHole == ShellContract.ShellEntry.HOLE_UNKNOWN
-                && TextUtils.isEmpty(photoString) && TextUtils.isEmpty(priceString)) {
+                TextUtils.isEmpty(nameString) || TextUtils.isEmpty(colorString)
+                || TextUtils.isEmpty(photoString) || TextUtils.isEmpty(priceString)
+                || TextUtils.isEmpty(quantityString)) {
             // Since no fields were modified, we can return early without creating a new shell.
             // No need to create ContentValues and no need to do any ContentProvider operations.
-            Toast.makeText(this, "No information for a shell was entered\n\n Shell Was Not Saved", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "All fields must be filled.\n\n Shell Was Not Saved", Toast.LENGTH_LONG).show();
             Intent i = getIntent();
             finish();
             startActivity(i);
@@ -352,7 +353,6 @@ public class EditorActivity extends AppCompatActivity implements
             price = Double.parseDouble(priceString);
         }
 
-        Log.i(LOG_TAG, " Lets see what photoString has for us after if: " + photoString);
         // Create a ContentValues object where column names are the keys,
         // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
@@ -865,14 +865,16 @@ public class EditorActivity extends AppCompatActivity implements
      * can order their own shell necklace */
     public void orderProduct(View view) {
 
-        String url = "https://www.soulshells.com";
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        // first verify that an app exists to receive the intent
+        String nameProduct = mNameEditText.getText().toString();
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_EMAIL, "supplier@example.com");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Order " + nameProduct);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         } else {
-            Toast.makeText(this, "Sorry no access to the website www.soulshells.com", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Sorry no access to email", Toast.LENGTH_SHORT).show();
             return;
         }
 

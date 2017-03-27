@@ -16,9 +16,12 @@
 
 package us.theparamountgroup.android.inventory;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.TextUtils;
@@ -26,9 +29,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.theparamountgroup.android.inventory.R;
 
@@ -83,15 +88,20 @@ public class ShellCursorAdapter extends CursorAdapter {
      */
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
 
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView colorTextView = (TextView) view.findViewById(R.id.color);
-        TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
+        final TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
         ImageView photoImageView = (ImageView) view.findViewById(R.id.thumbnail);
-
+        Button saleButton = (Button) view.findViewById(R.id.sale_button);
+        final String idColumn = cursor.getString(cursor.getColumnIndexOrThrow(
+                ShellContract.ShellEntry._ID));
+        final String nameColumn = cursor.getString(cursor.getColumnIndexOrThrow(
+                ShellContract.ShellEntry.COLUMN_SHELL_NAME));
+        final Uri currentProductUri = ContentUris.withAppendedId(ShellContract.ShellEntry.CONTENT_URI, Long.parseLong(idColumn));
         // Find the columns of shell attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_NAME);
         int colorColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_COLOR);
@@ -101,7 +111,8 @@ public class ShellCursorAdapter extends CursorAdapter {
         int thumbnailColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_THUMBNAIL);
 
         // Read the shell attributes from the Cursor for the current shell
-        String shellName = cursor.getString(nameColumnIndex);
+
+        final String shellName = cursor.getString(nameColumnIndex);
         String shellColor = cursor.getString(colorColumnIndex);
         String shellQuantity = cursor.getString(quantityColumnIndex);
         String shellPrice = cursor.getString(priceColumnIndex);
@@ -128,7 +139,41 @@ public class ShellCursorAdapter extends CursorAdapter {
         // that says "Unknown color", so the TextView isn't blank.
         if (TextUtils.isEmpty(shellColor)) {
             shellColor = context.getString(R.string.unknown_color);
-        }
+        };
+
+
+        saleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int quantity;
+                if (quantityTextView.getText().toString().isEmpty()) {
+                    quantity = 0;
+                } else {
+                    quantity = Integer.parseInt(quantityTextView.getText().toString());
+                }
+                if (quantity > 0) {
+                    quantity = quantity - 1;
+                    quantityTextView.setText(String.valueOf(quantity));
+
+                    ContentValues values = new ContentValues();
+                   // values.put(ShellContract.ShellEntry.COLUMN_SHELL_NAME, shellName);
+                    values.put(ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY, quantity);
+                    //values.put(ProductEntry.COLUMN_PRODUCT_PRICE, priceColumn);
+                    //values.put(ProductEntry.COLUMN_PRODUCT_PHOTO, photoColumn);
+
+                    int rowsAffected = context.getContentResolver().update(currentProductUri, values, null, null);
+                    if (rowsAffected == 0) {
+                       // Toast.makeText(v.getContext(), v.getContext().getString("error updating"), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(v.getContext(), "Sale Product " + nameColumn, Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(v.getContext(), "Order Product", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         // Update the TextViews with the attributes for the current shell
         nameTextView.setText(shellName);
@@ -136,4 +181,6 @@ public class ShellCursorAdapter extends CursorAdapter {
         quantityTextView.setText(shellQuantity);
         priceTextView.setText("$" + shellPrice);
     }
+
+
 }

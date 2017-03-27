@@ -139,8 +139,8 @@
     <string name="order">Order</string>
     <string name="take_photo">Take photo</string>
     <string name="select_photo">Select photo</string>
-    <string name="plus_sign">+</string>
-    <string name="minus_sign">-</string>
+    <string name="receive">RECEIVE</string>
+    <string name="editor_sale">SALE</string>
     <!-- Labels for the shell info in list item layout [CHAR LIMIT=20] -->
     <string name="quantity_list">QTY:</string>
     <string name="price_list">Price: \s</string>

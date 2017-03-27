@@ -167,24 +167,24 @@
                     <Button
                         android:id="@+id/plus"
                         style="@android:style/Widget.Button.Small"
-                        android:layout_width="45dp"
+                        android:layout_width="100dp"
                         android:layout_height="45dp"
                         android:layout_marginRight="15dp"
                         android:backgroundTint="@color/buttonColor"
                         android:onClick="addQuantity"
-                        android:text="@string/plus_sign"
-                        android:textAppearance="?android:textAppearanceLarge"
+                        android:text="@string/receive"
+                        android:textAppearance="?android:textAppearanceSmall"
                         android:textColor="@drawable/button_text_color" />
 
                     <Button
                         android:id="@+id/minus"
                         style="@android:style/Widget.Button.Small"
-                        android:layout_width="45dp"
+                        android:layout_width="100dp"
                         android:layout_height="45dp"
                         android:backgroundTint="@color/buttonColor"
                         android:onClick="subtractQuantity"
-                        android:text="@string/minus_sign"
-                        android:textAppearance="?android:textAppearanceLarge"
+                        android:text="@string/editor_sale"
+                        android:textAppearance="?android:textAppearanceSmall"
                         android:textColor="@drawable/button_text_color" />
 
                     <TextView
@@ -240,8 +240,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
                 android:digits="0123456789."
-                android:hint="@string/price_list"
-                android:inputType="textCapWords"
+                android:hint="@string/price"
+                android:inputType="numberDecimal"
                 android:textColor="@color/altColorAccent"
                 android:textStyle="bold" />
 
