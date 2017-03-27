@@ -23,7 +23,7 @@ import us.theparamountgroup.android.inventory.data.ShellContract;
 public class ShellFragmentSlipper extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String LOG_TAG = ShellFragmentSlipper.class.getSimpleName();
     /**
-     * Identifier for the pet data loader
+     * Identifier for the shell data loader
      */
     private static final int PET_LOADER = 0;
     /**
@@ -32,7 +32,6 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
     ShellCursorAdapter mCursorAdapter;
 
     public ShellFragmentSlipper() {
-        Log.i(LOG_TAG, "In ShellFragmentScallops");
         // Required empty public constructor
     }
 
@@ -46,7 +45,6 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
         View rootView = inflater.inflate(R.layout.fragment_shells, container, false);
         // Inflate the layout for this fragment
 
-
         // Setup FAB to open EditorActivity
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab2);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +55,6 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
             }
         });
 
-
         // Find the ListView which will be populated with the pet data
         ListView petListView = (ListView) rootView.findViewById(R.id.list);
 
@@ -65,8 +62,8 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
         View emptyView = rootView.findViewById(R.id.empty_view);
         petListView.setEmptyView(emptyView);
 
-        // Setup an Adapter to create a list item for each row of pet data in the Cursor.
-        // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
+        // Setup an Adapter to create a list item for each row of shell data in the Cursor.
+        // There is no shell data yet (until the loader finishes) so pass in null for the Cursor.
 
         mCursorAdapter = new ShellCursorAdapter(getContext(), null);
         petListView.setAdapter(mCursorAdapter);
@@ -81,14 +78,14 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
                 // Form the content URI that represents the specific pet that was clicked on,
                 // by appending the "id" (passed as input to this method) onto the
                 // {@link ShellEntry#CONTENT_URI}.
-                // For example, the URI would be "content://com.example.android.pets/pets/2"
-                // if the pet with ID 2 was clicked on.
+                // For example, the URI would be "content://com.example.android.shells/shells/2"
+                // if the shell with ID 2 was clicked on.
                 Uri currentPetUri = ContentUris.withAppendedId(ShellContract.ShellEntry.CONTENT_URI, id);
 
                 // Set the URI on the data field of the intent
                 intent.setData(currentPetUri);
 
-                // Launch the {@link EditorActivity} to display the data for the current pet.
+                // Launch the {@link EditorActivity} to display the data for the current shell.
                 startActivity(intent);
             }
         });
@@ -96,14 +93,11 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
         // Kick off the loader
         getLoaderManager().initLoader(PET_LOADER, null, this);
 
-
         return rootView;
-
     }
 
 
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        Log.i(LOG_TAG, "in onCreateLoader");
 
         // Define a projection that specifies the columns from the table we care about.
         String[] projection = {
@@ -123,14 +117,13 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
         return new android.support.v4.content.CursorLoader(getContext(),   // Parent activity context
                 ShellContract.ShellEntry.CONTENT_URI,   // Provider content URI to query
                 projection,             // Columns to include in the resulting Cursor
-                ShellContract.ShellEntry.COLUMN_SHELL_TYPE + "=?",               //     No selection clause
-                slipperArgument,                     // No selection arguments
+                ShellContract.ShellEntry.COLUMN_SHELL_TYPE + "=?",               // selection clause shell type
+                slipperArgument,                     //selection arguments "2" slipper
                 null);                  // Default sort order
     }
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        Log.i(LOG_TAG, "in onLoadFinished");
 
         // Update {@link ShellCursorAdapter} with this new cursor containing updated pet data
         mCursorAdapter.swapCursor(data);
@@ -141,6 +134,4 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
         // Callback called when the data needs to be deleted
         mCursorAdapter.swapCursor(null);
     }
-
-
 }

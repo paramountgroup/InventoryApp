@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +22,16 @@ import us.theparamountgroup.android.inventory.data.ShellContract.ShellEntry;
 public class ShellFragmentScallops extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String LOG_TAG = ShellFragmentScallops.class.getSimpleName();
     /**
-     * Identifier for the pet data loader
+     * Identifier for the shell data loader
      */
-    private static final int PET_LOADER = 0;
+    private static final int SHELL_LOADER = 0;
 
-    private static String NO_PHOTO = "";
     /**
      * Adapter for the ListView
      */
     ShellCursorAdapter mCursorAdapter;
 
     public ShellFragmentScallops() {
-        Log.i(LOG_TAG, "In ShellFragmentScallops");
         // Required empty public constructor
     }
 
@@ -43,11 +40,8 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-
-        Log.i(LOG_TAG, "in onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_shells, container, false);
         // Inflate the layout for this fragment
-
 
         // Setup FAB to open EditorActivity
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab2);
@@ -59,8 +53,7 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
             }
         });
 
-
-        // Find the ListView which will be populated with the pet data
+        // Find the ListView which will be populated with the shell data
         ListView petListView = (ListView) rootView.findViewById(R.id.list);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
@@ -68,7 +61,7 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
         petListView.setEmptyView(emptyView);
 
         // Setup an Adapter to create a list item for each row of pet data in the Cursor.
-        // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
+        // There is no shell data yet (until the loader finishes) so pass in null for the Cursor.
 
         mCursorAdapter = new ShellCursorAdapter(getContext(), null);
         petListView.setAdapter(mCursorAdapter);
@@ -83,8 +76,8 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
                 // Form the content URI that represents the specific shell that was clicked on,
                 // by appending the "id" (passed as input to this method) onto the
                 // {@link ShellEntry#CONTENT_URI}.
-                // For example, the URI would be "content://com.example.android.pets/pets/2"
-                // if the pet with ID 2 was clicked on.
+                // For example, the URI would be "content://com.example.android.shells/shells/2"
+                // if the shell with ID 2 was clicked on.
                 Uri currentPetUri = ContentUris.withAppendedId(ShellEntry.CONTENT_URI, id);
 
                 // Set the URI on the data field of the intent
@@ -96,16 +89,12 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
         });
 
         // Kick off the loader
-        getLoaderManager().initLoader(PET_LOADER, null, this);
-
+        getLoaderManager().initLoader(SHELL_LOADER, null, this);
 
         return rootView;
-
     }
 
-
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        Log.i(LOG_TAG, "in onCreateLoader");
 
         // Define a projection that specifies the columns from the table we care about.
         String[] projection = {
@@ -118,7 +107,6 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
                 ShellEntry.COLUMN_SHELL_PHOTO,
                 ShellEntry.COLUMN_SHELL_THUMBNAIL};
 
-
         String[] scallopArgument = {
                 "0"
         };
@@ -127,45 +115,16 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
         return new android.support.v4.content.CursorLoader(getContext(),   // Parent activity context
                 ShellEntry.CONTENT_URI,   // Provider content URI to query
                 projection,             // Columns to include in the resulting Cursor
-                ShellEntry.COLUMN_SHELL_TYPE + "=?",               //     No selection clause
-                scallopArgument,                     // No selection arguments
+                ShellEntry.COLUMN_SHELL_TYPE + "=?",               // selection clause shell type
+                scallopArgument,                     //selection argument "0" Scallop
                 null);                  // Default sort order
     }
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        Log.i(LOG_TAG, "in onLoadFinished");
 
         // Update {@link ShellCursorAdapter} with this new cursor containing updated shell data
         mCursorAdapter.swapCursor(data);
-/*
-        if (data.moveToFirst()) {
-            int nameColumnIndex = data.getColumnIndex(ShellEntry.COLUMN_SHELL_NAME);
-            int colorColumnIndex = data.getColumnIndex(ShellEntry.COLUMN_SHELL_COLOR);
-            int quantityColumnIndex = data.getColumnIndex(ProductEntry.COLUMN_SHELL_QUANTITY);
-            int priceColumnIndex = data.getColumnIndex(ProductEntry.COLUMN_SHELL_PRICE);
-            int photoColumnIndex = data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PHOTO);
-
-            String name = data.getString(nameColumnIndex);
-            String color = data.getString(colorColumnIndex);
-            int quantity = data.getInt(quantityColumnIndex);
-            double price = data.getDouble(priceColumnIndex);
-            String photo = data.getString(photoColumnIndex);
-
-            mNameEditText.setText(name);
-            mSalesTextView.setText(color);
-            mQuantityTextView.setText(Integer.toString(quantity));
-            mPriceEditText.setText(Double.toString(price));
-
-            if (!photo.isEmpty()) {
-                mUri = Uri.parse(photo);
-                mBitmap = getBitmapFromUri(mUri);
-                mImageView.setImageBitmap(mBitmap);
-            }
-            hideSoftKeyboard();
-        }
-
-        */
     }
 
     @Override
@@ -173,6 +132,4 @@ public class ShellFragmentScallops extends Fragment implements LoaderManager.Loa
         // Callback called when the data needs to be deleted
         mCursorAdapter.swapCursor(null);
     }
-
-
 }

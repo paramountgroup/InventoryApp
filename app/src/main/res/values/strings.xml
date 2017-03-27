@@ -119,7 +119,7 @@
     <string name="type_shard">Shard</string>
 
     <!-- Label for the pet's breed if the breed is unknown [CHAR LIMIT=20] -->
-    <string name="unknown_color">Unknown color</string>
+    <string name="unknown_color">Unknown\n color</string>
 
     <string name="scallops">Scallops</string>
     <string name="jingle">Jingle</string>

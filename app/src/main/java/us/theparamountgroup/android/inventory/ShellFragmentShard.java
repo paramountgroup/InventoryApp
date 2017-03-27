@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +22,15 @@ import us.theparamountgroup.android.inventory.data.ShellContract;
 public class ShellFragmentShard extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String LOG_TAG = ShellFragmentShard.class.getSimpleName();
     /**
-     * Identifier for the pet data loader
+     * Identifier for the shell data loader
      */
-    private static final int PET_LOADER = 0;
+    private static final int SHELL_LOADER = 0;
     /**
      * Adapter for the ListView
      */
     ShellCursorAdapter mCursorAdapter;
 
     public ShellFragmentShard() {
-        Log.i(LOG_TAG, "In ShellFragmentScallops");
         // Required empty public constructor
     }
 
@@ -41,11 +39,8 @@ public class ShellFragmentShard extends Fragment implements LoaderManager.Loader
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-
-        Log.i(LOG_TAG, "in onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_shells, container, false);
         // Inflate the layout for this fragment
-
 
         // Setup FAB to open EditorActivity
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab2);
@@ -57,16 +52,15 @@ public class ShellFragmentShard extends Fragment implements LoaderManager.Loader
             }
         });
 
-
-        // Find the ListView which will be populated with the pet data
+        // Find the ListView which will be populated with the shell data
         ListView petListView = (ListView) rootView.findViewById(R.id.list);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = rootView.findViewById(R.id.empty_view);
         petListView.setEmptyView(emptyView);
 
-        // Setup an Adapter to create a list item for each row of pet data in the Cursor.
-        // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
+        // Setup an Adapter to create a list item for each row of shell data in the Cursor.
+        // There is no shell data yet (until the loader finishes) so pass in null for the Cursor.
 
         mCursorAdapter = new ShellCursorAdapter(getContext(), null);
         petListView.setAdapter(mCursorAdapter);
@@ -81,29 +75,25 @@ public class ShellFragmentShard extends Fragment implements LoaderManager.Loader
                 // Form the content URI that represents the specific pet that was clicked on,
                 // by appending the "id" (passed as input to this method) onto the
                 // {@link ShellEntry#CONTENT_URI}.
-                // For example, the URI would be "content://com.example.android.pets/pets/2"
-                // if the pet with ID 2 was clicked on.
+                // For example, the URI would be "content://com.example.android.shells/shells/2"
+                // if the shell with ID 2 was clicked on.
                 Uri currentPetUri = ContentUris.withAppendedId(ShellContract.ShellEntry.CONTENT_URI, id);
 
                 // Set the URI on the data field of the intent
                 intent.setData(currentPetUri);
 
-                // Launch the {@link EditorActivity} to display the data for the current pet.
+                // Launch the {@link EditorActivity} to display the data for the current shell.
                 startActivity(intent);
             }
         });
 
         // Kick off the loader
-        getLoaderManager().initLoader(PET_LOADER, null, this);
-
+        getLoaderManager().initLoader(SHELL_LOADER, null, this);
 
         return rootView;
-
     }
 
-
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        Log.i(LOG_TAG, "in onCreateLoader");
 
         // Define a projection that specifies the columns from the table we care about.
         String[] projection = {
@@ -123,16 +113,15 @@ public class ShellFragmentShard extends Fragment implements LoaderManager.Loader
         return new android.support.v4.content.CursorLoader(getContext(),   // Parent activity context
                 ShellContract.ShellEntry.CONTENT_URI,   // Provider content URI to query
                 projection,             // Columns to include in the resulting Cursor
-                ShellContract.ShellEntry.COLUMN_SHELL_TYPE + "=?",               //     No selection clause
-                shardArgument,                     // No selection arguments
+                ShellContract.ShellEntry.COLUMN_SHELL_TYPE + "=?",               // selection clause shell type
+                shardArgument,                     //selection arguments "3" shard
                 null);                  // Default sort order
     }
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        Log.i(LOG_TAG, "in onLoadFinished");
 
-        // Update {@link ShellCursorAdapter} with this new cursor containing updated pet data
+        // Update {@link ShellCursorAdapter} with this new cursor containing updated shell data
         mCursorAdapter.swapCursor(data);
     }
 

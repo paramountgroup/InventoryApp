@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package us.theparamountgroup.android.inventory;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.TextUtils;
@@ -41,6 +41,7 @@ import static us.theparamountgroup.android.inventory.data.DbBitmapUtility.getIma
  * that uses a {@link Cursor} of pet data as its data source. This adapter knows
  * how to create list items for each row of pet data in the {@link Cursor}.
  */
+
 public class ShellCursorAdapter extends CursorAdapter {
     public static final String LOG_TAG = ShellCursorAdapter.class.getSimpleName();
 
@@ -64,9 +65,6 @@ public class ShellCursorAdapter extends CursorAdapter {
      * @return the newly created list item view.
      */
 
-    private Uri mUri;
-    private Bitmap mBitmap;
-
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         // Inflate a list item view using the layout specified in list_item.xml
@@ -83,15 +81,17 @@ public class ShellCursorAdapter extends CursorAdapter {
      * @param cursor  The cursor from which to get the data. The cursor is already moved to the
      *                correct row.
      */
+
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+
         // Find individual views that we want to modify in the list item layout
-        final int THUMBNAIL_SIZE = 75;
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView colorTextView = (TextView) view.findViewById(R.id.color);
         TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
         ImageView photoImageView = (ImageView) view.findViewById(R.id.thumbnail);
+
         // Find the columns of shell attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_NAME);
         int colorColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_COLOR);
@@ -99,17 +99,15 @@ public class ShellCursorAdapter extends CursorAdapter {
         int quantityColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_QUANTITY);
         int priceColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_PRICE);
         int thumbnailColumnIndex = cursor.getColumnIndex(ShellContract.ShellEntry.COLUMN_SHELL_THUMBNAIL);
+
         // Read the shell attributes from the Cursor for the current shell
         String shellName = cursor.getString(nameColumnIndex);
-        Log.i(LOG_TAG, " Lets find the stored string for the shellName: " + shellName);
         String shellColor = cursor.getString(colorColumnIndex);
-        Log.i(LOG_TAG, " Lets find the stored string for the shellColor: " + shellColor);
         String shellQuantity = cursor.getString(quantityColumnIndex);
         String shellPrice = cursor.getString(priceColumnIndex);
         String photo = cursor.getString(photoColumnIndex);
 
-
-
+        // check if there is photo saved for item and assign the saved thumbnail to photoImageView
         if (!photo.isEmpty()) {
             try {
                 byte[] thumbnail = cursor.getBlob(thumbnailColumnIndex);
@@ -126,35 +124,6 @@ public class ShellCursorAdapter extends CursorAdapter {
             }
         }
 
-
-
-
-
-
-
-        /*
-        if (!photo.isEmpty()) {
-            try {
-                Uri myUri = Uri.parse(photo);
-                Log.i(LOG_TAG, " getting ready to make thumbnail myUri is: " + photo);
-                Bitmap thumbImage = ThumbnailUtils.extractThumbnail(MediaStore.Images.Media.getBitmap(context.getContentResolver(), myUri), THUMBNAIL_SIZE, THUMBNAIL_SIZE);
-                photoImageView.setBackground(null);
-                int cornerRadius = 10;
-                RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(context.getResources(), thumbImage);
-                dr.setCornerRadius(cornerRadius);
-                photoImageView.setImageDrawable(dr);
-                Log.i(LOG_TAG, " thumbnail assigned to imageView ");
-                //photoImageView.setImageBitmap(thumbImage);
-
-            } catch (MalformedURLException e) {
-                Log.e("ThumbnailUtils", "Problem extracting thumbnail", e);
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        */
         // If the shell color is empty string or null, then use some default text
         // that says "Unknown color", so the TextView isn't blank.
         if (TextUtils.isEmpty(shellColor)) {
@@ -166,9 +135,5 @@ public class ShellCursorAdapter extends CursorAdapter {
         colorTextView.setText(shellColor);
         quantityTextView.setText(shellQuantity);
         priceTextView.setText("$" + shellPrice);
-
-
     }
-
-
 }

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,14 +90,11 @@ public class ShellFragmentJingle extends Fragment implements LoaderManager.Loade
         // Kick off the loader
         getLoaderManager().initLoader(SHELL_LOADER, null, this);
 
-
         return rootView;
-
     }
 
 
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        Log.i(LOG_TAG, "in onCreateLoader");
 
         // Define a projection that specifies the columns from the table we care about.
         String[] projection = {
@@ -125,7 +121,6 @@ public class ShellFragmentJingle extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        Log.i(LOG_TAG, "in onLoadFinished");
 
         // Update {@link ShellCursorAdapter} with this new cursor containing updated shell data
         mCursorAdapter.swapCursor(data);
