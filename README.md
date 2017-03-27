@@ -4,7 +4,7 @@ Inventory App
 This app displays a list of shells and their related data that the user inputs.
 Final assigned project in a Udacity course in the Android Basics Nanodegree by Google.
 
-Citing Code Source
+Citing Code Sources
 --------------
 
 - This project was adapted from a Udacity instruction sample ud845 Pets App
