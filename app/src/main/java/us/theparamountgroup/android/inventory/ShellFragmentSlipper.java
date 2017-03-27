@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +39,6 @@ public class ShellFragmentSlipper extends Fragment implements LoaderManager.Load
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-
-        Log.i(LOG_TAG, "in onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_shells, container, false);
         // Inflate the layout for this fragment
 

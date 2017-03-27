@@ -214,9 +214,9 @@
             <TextView
                 android:id="@+id/price"
                 style="@style/CategoryStyle"
-                android:layout_weight="4"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="4"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/price"
                 android:textAppearance="?android:textAppearanceMedium" />
@@ -244,6 +244,7 @@
                 android:inputType="textCapWords"
                 android:textColor="@color/altColorAccent"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/label_price_units"
                 style="@style/EditorUnitsStyle"
@@ -298,6 +299,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/image_of_shell"
                 android:scaleType="fitCenter" />
 
             <Button
@@ -315,7 +317,5 @@
                 android:textColor="@drawable/button_text_color" />
 
         </RelativeLayout>
-
-
     </LinearLayout>
 </ScrollView>

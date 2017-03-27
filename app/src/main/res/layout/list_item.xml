@@ -31,7 +31,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:layout_weight="3"
         android:orientation="vertical">
@@ -78,7 +77,6 @@
                 android:fontFamily="sans-serif"
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="@color/colorPrimary" />
-
 
         </LinearLayout>
 
