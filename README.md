@@ -8,7 +8,7 @@ Citing Code Source
 --------------
 
 - This project was adapted from a Udacity instruction sample ud845 Pets App
-* forum here:https://github.com/udacity/ud845-Pets/tree/lesson-four
+* https://github.com/udacity/ud845-Pets/tree/lesson-four
 
 - Additional support for image file read/write based on github cavi/2016 Inventory10
 * https://github.com/cavi2016/Inventory10
